@@ -66,10 +66,10 @@ const Hero = () => {
                 color: 'transparent',
                 WebkitTextStroke: '2px white',
                 textStroke: '2px white',
-                fontFamily: 'Playfair Display, serif',
+                fontFamily: 'Playfair Display, serif',                                                                                  
                 fontWeight: 900,
-                animationDelay: '0.3s'
-              }}>
+                animationDelay: '0.3s'                                                                                                                                                    
+              }}>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
             STYLISTIC
           </h1>
           
@@ -88,10 +88,10 @@ const Hero = () => {
               padding: '15px 35px',
               letterSpacing: '1px',
               fontWeight: 500,
-              animationDelay: '0.9s'
+              animationDelay: '0.9s'                                                                                                            
             }}
           >
-            Become A Model
+            Become A Model                                                                                                          
           </button>
         </div>
       </div>
