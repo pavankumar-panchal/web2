@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Stylistic — Modern Creative Agency</title>
+  <meta name="description" content="A modern creative agency theme inspired by Stylistic with elegant typography and subtle interactions." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Header -->
+  <header class="site-header" id="top">
+    <div class="container">
+      <div class="brand">Stylistic</div>
+      <nav class="nav" aria-label="Primary">
+        <button class="nav__toggle" aria-expanded="false" aria-controls="navMenu" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+        <ul id="navMenu" class="nav__list">
+          <li><a href="#hero">Home</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#services">Services</a></li>
+          <li><a href="#portfolio">Portfolio</a></li>
+          <li><a href="#blog">Blog</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section id="hero" class="hero" aria-label="Hero">
+    <div class="hero__media" role="img" aria-label="Galaxy background"></div>
+    <div class="hero__overlay"></div>
+    <div class="container hero__content">
+      <p class="eyebrow reveal">WELCOME TO</p>
+      <h1 class="display reveal">STYLISTIC</h1>
+      <p class="subhead reveal">A Modern Creative & Model Agency</p>
+      <div class="cta reveal">
+        <a href="#portfolio" class="btn btn--primary">View Portfolio</a>
+        <a href="#contact" class="btn btn--ghost">Contact Us</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services -->
+  <section id="services" class="section">
+    <div class="container narrow">
+      <header class="section__head reveal">
+        <h2 class="h2">Our Services</h2>
+        <p class="muted">Comprehensive modeling and creative solutions with a focus on editorial, commercial, and brand excellence.</p>
+      </header>
+      <div class="grid grid-3">
+        <article class="card service reveal">
+          <div class="icon">📸</div>
+          <h3 class="h4">Editorial & Runway</h3>
+          <p>Top-tier talent for fashion shows, magazine editorials, and high-fashion campaigns.</p>
+        </article>
+        <article class="card service reveal" style="animation-delay:80ms">
+          <div class="icon">✨</div>
+          <h3 class="h4">Commercial Modeling</h3>
+          <p>Versatile models for advertising, e-commerce, and brand campaigns.</p>
+        </article>
+        <article class="card service reveal" style="animation-delay:160ms">
+          <div class="icon">📈</div>
+          <h3 class="h4">Career Development</h3>
+          <p>Training, portfolio building, and long-term career management.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Portfolio -->
+  <section id="portfolio" class="section section--light">
+    <div class="container narrow">
+      <header class="section__head reveal">
+        <h2 class="h2">Portfolio</h2>
+        <p class="muted">Explore our work across web design, branding, and photography.</p>
+      </header>
+
+      <div class="filters reveal" role="tablist" aria-label="Portfolio filters">
+        <button class="chip is-active" data-filter="all" role="tab" aria-selected="true">All</button>
+        <button class="chip" data-filter="web" role="tab">Web Design</button>
+        <button class="chip" data-filter="brand" role="tab">Branding</button>
+        <button class="chip" data-filter="photo" role="tab">Photography</button>
+      </div>
+
+      <div class="grid grid-3 portfolio__grid">
+        <figure class="tile reveal" data-cat="web">
+          <img src="https://images.unsplash.com/photo-1547658719-da2b51169166?q=80&w=1000&auto=format&fit=crop" alt="Minimal website concept" />
+          <figcaption>
+            <span class="cat">Web Design</span>
+            <span class="ttl">Minimal Concept</span>
+          </figcaption>
+        </figure>
+        <figure class="tile reveal" data-cat="brand" style="animation-delay:60ms">
+          <img src="https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?q=80&w=1000&auto=format&fit=crop" alt="Brand packaging" />
+          <figcaption>
+            <span class="cat">Branding</span>
+            <span class="ttl">Packaging System</span>
+          </figcaption>
+        </figure>
+        <figure class="tile reveal" data-cat="photo" style="animation-delay:120ms">
+          <img src="https://images.unsplash.com/photo-1520975922284-8b456906c813?q=80&w=1000&auto=format&fit=crop" alt="Fashion editorial" />
+          <figcaption>
+            <span class="cat">Photography</span>
+            <span class="ttl">Fashion Editorial</span>
+          </figcaption>
+        </figure>
+        <figure class="tile reveal" data-cat="web">
+          <img src="https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?q=80&w=1000&auto=format&fit=crop" alt="Creative website" />
+          <figcaption>
+            <span class="cat">Web Design</span>
+            <span class="ttl">Creative Studio</span>
+          </figcaption>
+        </figure>
+        <figure class="tile reveal" data-cat="brand">
+          <img src="https://images.unsplash.com/photo-1538688423619-72a3af6d5bbf?q=80&w=1000&auto=format&fit=crop" alt="Logo design mockups" />
+          <figcaption>
+            <span class="cat">Branding</span>
+            <span class="ttl">Identity Kit</span>
+          </figcaption>
+        </figure>
+        <figure class="tile reveal" data-cat="photo">
+          <img src="https://images.unsplash.com/photo-1504198266285-165a6c43fa6e?q=80&w=1000&auto=format&fit=crop" alt="Product showcase" />
+          <figcaption>
+            <span class="cat">Photography</span>
+            <span class="ttl">Product Showcase</span>
+          </figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section id="about" class="section">
+    <div class="container">
+      <div class="split">
+        <div class="split__media reveal">
+          <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?q=80&w=1200&auto=format&fit=crop" alt="Team" />
+        </div>
+        <div class="split__content reveal">
+          <h2 class="h2">About Us</h2>
+          <p class="lead">We elevate brands through concept-driven design, fashion-forward production, and world-class talent.</p>
+          <p>Our team blends artistry with strategy to craft memorable experiences. From campaigns to digital ecosystems, we deliver at the highest level.</p>
+        </div>
+      </div>
+
+      <div class="team">
+        <article class="member reveal">
+          <img src="https://images.unsplash.com/photo-1556157382-97eda2d62296?q=80&w=800&auto=format&fit=crop" alt="Creative Director" />
+          <div class="member__meta">
+            <h3 class="h5">Ava Collins</h3>
+            <p>Creative Director</p>
+          </div>
+        </article>
+        <article class="member reveal" style="animation-delay:80ms">
+          <img src="https://images.unsplash.com/photo-1527980965255-d3b416303d12?q=80&w=800&auto=format&fit=crop" alt="Lead Photographer" />
+          <div class="member__meta">
+            <h3 class="h5">Noah Patel</h3>
+            <p>Lead Photographer</p>
+          </div>
+        </article>
+        <article class="member reveal" style="animation-delay:160ms">
+          <img src="https://images.unsplash.com/photo-1527980965255-d3b416303d12?q=80&w=800&auto=format&fit=crop" alt="Art Director" />
+          <div class="member__meta">
+            <h3 class="h5">Maya Chen</h3>
+            <p>Art Director</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section id="testimonials" class="section section--light">
+    <div class="container narrow">
+      <header class="section__head reveal">
+        <h2 class="h2">What Clients Say</h2>
+        <p class="muted">Real stories from our partners and clients.</p>
+      </header>
+
+      <div class="slider" aria-roledescription="carousel">
+        <div class="slides">
+          <figure class="slide is-active">
+            <img class="avatar" src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=400&auto=format&fit=crop" alt="Client portrait" />
+            <blockquote>Stylistic elevated our brand far beyond expectations. The attention to detail is unmatched.</blockquote>
+            <figcaption>— Olivia Martinez, CMO</figcaption>
+          </figure>
+          <figure class="slide">
+            <img class="avatar" src="https://images.unsplash.com/photo-1547425260-76bcadfb4f2c?q=80&w=400&auto=format&fit=crop" alt="Client portrait" />
+            <blockquote>Remarkable creative partners. From strategy to execution, flawless delivery.</blockquote>
+            <figcaption>— Daniel Lee, Founder</figcaption>
+          </figure>
+          <figure class="slide">
+            <img class="avatar" src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=400&auto=format&fit=crop" alt="Client portrait" />
+            <blockquote>Our campaign went global thanks to their vision and precision.</blockquote>
+            <figcaption>— Sophia Turner, Brand Director</figcaption>
+          </figure>
+        </div>
+        <div class="slider__nav">
+          <button class="prev" aria-label="Previous">‹</button>
+          <button class="next" aria-label="Next">›</button>
+        </div>
+        <div class="dots" role="tablist" aria-label="Testimonial slides"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Blog (simple placeholder to match nav) -->
+  <section id="blog" class="section">
+    <div class="container narrow">
+      <header class="section__head reveal">
+        <h2 class="h2">From the Blog</h2>
+        <p class="muted">Insights and stories on fashion, creativity, and culture.</p>
+      </header>
+      <div class="grid grid-3">
+        <article class="card post reveal">
+          <h3 class="h4">Designing for Emotion</h3>
+          <p>How to craft experiences that resonate deeply with audiences.</p>
+          <a href="#" class="link">Read more →</a>
+        </article>
+        <article class="card post reveal" style="animation-delay:80ms">
+          <h3 class="h4">Behind the Editorial</h3>
+          <p>Our process for building timeless, high-fashion editorials.</p>
+          <a href="#" class="link">Read more →</a>
+        </article>
+        <article class="card post reveal" style="animation-delay:160ms">
+          <h3 class="h4">Creating Brand Worlds</h3>
+          <p>From strategy to visuals: unifying your brand story.</p>
+          <a href="#" class="link">Read more →</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact" class="section section--light">
+    <div class="container">
+      <header class="section__head reveal">
+        <h2 class="h2">Contact Us</h2>
+        <p class="muted">Let’s build something extraordinary together.</p>
+      </header>
+
+      <div class="split contact">
+        <form class="form card reveal" novalidate>
+          <div class="grid grid-2">
+            <label>
+              <span>Name</span>
+              <input type="text" name="name" required placeholder="Your name" />
+            </label>
+            <label>
+              <span>Email</span>
+              <input type="email" name="email" required placeholder="you@example.com" />
+            </label>
+          </div>
+          <label>
+            <span>Subject</span>
+            <input type="text" name="subject" placeholder="How can we help?" />
+          </label>
+          <label>
+            <span>Message</span>
+            <textarea name="message" rows="5" required placeholder="Tell us about your project"></textarea>
+          </label>
+          <button type="submit" class="btn btn--primary">Send Message</button>
+        </form>
+
+        <aside class="card info reveal" style="animation-delay:120ms">
+          <h3 class="h4">Contact Info</h3>
+          <ul class="list">
+            <li><strong>Address:</strong> 123 Fashion Ave, New York, NY</li>
+            <li><strong>Phone:</strong> (212) 555-1234</li>
+            <li><strong>Email:</strong> hello@stylistic.agency</li>
+          </ul>
+          <div class="socials">
+            <a href="#" aria-label="Instagram">IG</a>
+            <a href="#" aria-label="Twitter">TW</a>
+            <a href="#" aria-label="Dribbble">DB</a>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <p>© <span id="year"></span> Stylistic. All rights reserved.</p>
+      <div class="footer__right">
+        <a href="#top" class="backtotop" aria-label="Back to top">↑</a>
+        <div class="socials">
+          <a href="#" aria-label="Instagram">IG</a>
+          <a href="#" aria-label="Twitter">TW</a>
+          <a href="#" aria-label="Dribbble">DB</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js" defer></script>
+</body>
+</html>

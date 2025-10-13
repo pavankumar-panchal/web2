@@ -26,10 +26,10 @@ const Models = () => {
           {models.map((model, index) => (
             <Card
               key={index}
-              className="group overflow-hidden border-border hover:border-primary transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-primary/20 bg-card"
+              className="group overflow-hidden border-border hover:border-primary transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-primary/20 bg-card parallel-anim"
               style={{ animationDelay: `${index * 100}ms` }}
             >
-              <div className="aspect-[3/4] bg-gradient-to-br from-muted to-secondary relative overflow-hidden">
+              <div className="aspect-[3/4] bg-gradient-to-br from-muted to-secondary relative overflow-hidden media-card">
                 <div className="absolute inset-0 flex items-center justify-center text-6xl font-bold text-muted-foreground/20">
                   {model.name.split(' ').map(n => n[0]).join('')}
                 </div>
