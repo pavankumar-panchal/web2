@@ -31,22 +31,25 @@ const Header = () => {
           <span className={`block absolute h-[2px] w-full bg-white transition-all duration-300 ease-in-out ${isMenuOpen ? '-rotate-45 top-[9px]' : 'bottom-0'}`}></span>
         </div>
 
-        {/* Mobile Navigation Menu */}
+        {/* Mobile  Menu */}
         {isMenuOpen && (
-          <div className="fixed inset-0 z-40 flex animate-fade-in">
+          <div className="fixed inset-0 z-40 flex animate-fade-in bg-black/90 backdrop-blur-sm">
             {/* Left Side - Navigation Menu */}
-            <div className="w-full md:w-1/2 relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #000000 0%, #1a0a1a 50%, #000000 100%)' }}>
+            <div className="w-full md:w-1/2 relative overflow-hidden bg-black">
+              {/* Dark Overlay for Extra Darkness */}
+              <div className="absolute inset-0 bg-black/70"></div>
+              
               {/* Animated Background Pattern */}
-              <div className="absolute inset-0 opacity-10">
+              <div className="absolute inset-0 opacity-5">
                 <div className="absolute top-0 left-0 w-full h-full" style={{
-                  backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(255, 255, 255, .05) 35px, rgba(255, 255, 255, .05) 70px)',
+                  backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(255, 255, 255, .02) 35px, rgba(255, 255, 255, .02) 70px)',
                   animation: 'slidePattern 20s linear infinite'
                 }}></div>
               </div>
               
               {/* Glowing Orbs */}
-              <div className="absolute top-20 right-20 w-64 h-64 bg-pink-500 rounded-full blur-[120px] opacity-20 animate-pulse"></div>
-              <div className="absolute bottom-20 left-20 w-64 h-64 bg-purple-500 rounded-full blur-[120px] opacity-20 animate-pulse" style={{ animationDelay: '1s' }}></div>
+              <div className="absolute top-20 right-20 w-64 h-64 bg-pink-500 rounded-full blur-[120px] opacity-10 animate-pulse"></div>
+              <div className="absolute bottom-20 left-20 w-64 h-64 bg-purple-500 rounded-full blur-[120px] opacity-10 animate-pulse" style={{ animationDelay: '1s' }}></div>
               
               <div className="relative z-10 flex flex-col justify-center items-center h-full space-y-6 px-8">
                 <div className="space-y-6 w-full max-w-md">
@@ -106,15 +109,11 @@ const Header = () => {
             
             {/* Right Side - Featured Images Grid */}
             <div className="hidden md:block w-1/2 relative overflow-hidden bg-black">
-              {/* Main Large Image */}
-              <div className="absolute inset-0">
-                <img 
-                  src="/model1.jpeg"
-                  alt="Featured Model"
-                  className="w-full h-full object-cover animate-fade-in"
-                  style={{ animationDuration: '1s' }}
-                />
-                <div className="absolute inset-0 bg-gradient-to-br from-black/60 via-transparent to-black/80"></div>
+              {/* Solid Black Background - No Images */}
+              <div className="absolute inset-0 bg-black/80"></div>              {/* Floating Cards - Top Right */}
+              <div className="absolute top-8 right-8 space-y-4">
+                <div className="w-32 h-32 bg-cover bg-center rounded-lg transform rotate-12 shadow-2xl opacity-70 hover:opacity-90 transition-all duration-300 hover:scale-105" style={{backgroundImage: "url('/model2.jpeg')"}}></div>
+                <div className="w-24 h-32 bg-cover bg-center rounded-lg transform -rotate-6 shadow-2xl opacity-60 hover:opacity-80 transition-all duration-300 hover:scale-105" style={{backgroundImage: "url('/model3.jpeg')"}}></div>
               </div>
               
               {/* Floating Smaller Images */}
