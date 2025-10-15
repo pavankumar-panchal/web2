@@ -38,7 +38,7 @@ const Hero = () => {
       <div className="absolute inset-0 z-0">
         {backgroundVideos.map((video, index) => (
           <video 
-            key={index}
+            key={`${video}-${index}`}
             className={`absolute w-full h-full object-cover transition-opacity duration-1000 ${
               index === currentVideoIndex ? 'opacity-100' : 'opacity-0'
             }`}
@@ -46,6 +46,13 @@ const Hero = () => {
             loop
             autoPlay
             playsInline
+            preload="auto"
+            onEnded={(e) => {
+              // Ensure video loops by restarting
+              const videoElement = e.target as HTMLVideoElement;
+              videoElement.currentTime = 0;
+              videoElement.play();
+            }}
           >
             <source src={video} type="video/mp4" />
           </video>
@@ -100,87 +107,87 @@ const Hero = () => {
 
       {/* Model Grid at Bottom - Better positioned and aligned */}
       <div className="absolute left-0 right-0 z-50" style={{ bottom: '-80px' }}>
-        <div className="container mx-auto px-6" style={{ maxWidth: '1600px' }}>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="container mx-auto px-3 sm:px-6" style={{ maxWidth: '1600px' }}>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 lg:gap-8">
             {/* Image 1 */}
-            <div className="media-card rounded-xl group cursor-pointer shadow-xl parallel-anim" style={{ height: '430px' }}>
+            <div className="media-card rounded-lg sm:rounded-xl group cursor-pointer shadow-xl parallel-anim h-48 sm:h-64 md:h-80 lg:h-96 xl:h-[430px]">
               <img 
                 src={heroImages[0]?.src || `${base}model1.jpeg`}
                 alt={heroImages[0]?.alt || "Fashion Editorial"}
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 rounded-lg sm:rounded-xl"
               />
               
               {/* Dark Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent rounded-lg sm:rounded-xl"></div>
               
               {/* Model Info */}
-              <div className="absolute bottom-4 left-4 right-4 text-white">
-                <h3 className="text-xl md:text-2xl font-bold tracking-wider mb-1">{heroImages[0]?.alt || "Fashion Editorial"}</h3>
-                <p className="text-sm opacity-90">{heroImages[0]?.category || "Fashion"}</p>
-                <div className="flex items-center mt-2 space-x-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <div className="absolute bottom-2 sm:bottom-4 left-2 sm:left-4 right-2 sm:right-4 text-white">
+                <h3 className="text-sm sm:text-lg md:text-xl lg:text-2xl font-bold tracking-wider mb-0.5 sm:mb-1 truncate">{heroImages[0]?.alt || "Fashion Editorial"}</h3>
+                <p className="text-xs sm:text-sm opacity-90">{heroImages[0]?.category || "Fashion"}</p>
+                <div className="hidden sm:flex items-center mt-2 space-x-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                   <span className="text-xs bg-pink-500 px-2 py-1 rounded-full">Portfolio</span>
                 </div>
               </div>
             </div>
 
             {/* Image 2 */}
-            <div className="media-card rounded-xl group cursor-pointer shadow-xl parallel-anim" style={{ height: '430px', animationDelay:'80ms' }}>
+            <div className="media-card rounded-lg sm:rounded-xl group cursor-pointer shadow-xl parallel-anim h-48 sm:h-64 md:h-80 lg:h-96 xl:h-[430px]" style={{ animationDelay:'80ms' }}>
               <img 
                 src={heroImages[1]?.src || `${base}model2.jpeg`}
                 alt={heroImages[1]?.alt || "Beauty Editorial"}
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 rounded-lg sm:rounded-xl"
               />
               
               {/* Dark Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent rounded-lg sm:rounded-xl"></div>
               
               {/* Model Info */}
-              <div className="absolute bottom-4 left-4 right-4 text-white">
-                <h3 className="text-xl md:text-2xl font-bold tracking-wider mb-1">{heroImages[1]?.alt || "Beauty Editorial"}</h3>
-                <p className="text-sm opacity-90">{heroImages[1]?.category || "Beauty"}</p>
-                <div className="flex items-center mt-2 space-x-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <div className="absolute bottom-2 sm:bottom-4 left-2 sm:left-4 right-2 sm:right-4 text-white">
+                <h3 className="text-sm sm:text-lg md:text-xl lg:text-2xl font-bold tracking-wider mb-0.5 sm:mb-1 truncate">{heroImages[1]?.alt || "Beauty Editorial"}</h3>
+                <p className="text-xs sm:text-sm opacity-90">{heroImages[1]?.category || "Beauty"}</p>
+                <div className="hidden sm:flex items-center mt-2 space-x-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                   <span className="text-xs bg-pink-500 px-2 py-1 rounded-full">Featured</span>
                 </div>
               </div>
             </div>
 
             {/* Image 3 */}
-            <div className="media-card rounded-xl group cursor-pointer shadow-xl parallel-anim" style={{ height: '430px', animationDelay:'160ms' }}>
+            <div className="media-card rounded-lg sm:rounded-xl group cursor-pointer shadow-xl parallel-anim h-48 sm:h-64 md:h-80 lg:h-96 xl:h-[430px]" style={{ animationDelay:'160ms' }}>
               <img 
                 src={heroImages[2]?.src || `${base}model3.jpeg`}
                 alt={heroImages[2]?.alt || "Editorial Shoot"}
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 rounded-lg sm:rounded-xl"
               />
               
               {/* Dark Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent rounded-lg sm:rounded-xl"></div>
               
               {/* Model Info */}
-              <div className="absolute bottom-4 left-4 right-4 text-white">
-                <h3 className="text-xl md:text-2xl font-bold tracking-wider mb-1">{heroImages[2]?.alt || "Editorial Shoot"}</h3>
-                <p className="text-sm opacity-90">{heroImages[2]?.category || "Fashion"}</p>
-                <div className="flex items-center mt-2 space-x-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <div className="absolute bottom-2 sm:bottom-4 left-2 sm:left-4 right-2 sm:right-4 text-white">
+                <h3 className="text-sm sm:text-lg md:text-xl lg:text-2xl font-bold tracking-wider mb-0.5 sm:mb-1 truncate">{heroImages[2]?.alt || "Editorial Shoot"}</h3>
+                <p className="text-xs sm:text-sm opacity-90">{heroImages[2]?.category || "Fashion"}</p>
+                <div className="hidden sm:flex items-center mt-2 space-x-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                   <span className="text-xs bg-pink-500 px-2 py-1 rounded-full">Latest</span>
                 </div>
               </div>
             </div>
 
             {/* Image 4 */}
-            <div className="media-card rounded-xl group cursor-pointer shadow-xl parallel-anim" style={{ height: '430px', animationDelay:'240ms' }}>
+            <div className="media-card rounded-lg sm:rounded-xl group cursor-pointer shadow-xl parallel-anim h-48 sm:h-64 md:h-80 lg:h-96 xl:h-[430px]" style={{ animationDelay:'240ms' }}>
               <img 
                 src={heroImages[3]?.src || `${base}model4.jpeg`}
                 alt={heroImages[3]?.alt || "Bridal Collection"}
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 rounded-lg sm:rounded-xl"
               />
               
               {/* Dark Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent rounded-lg sm:rounded-xl"></div>
               
               {/* Model Info */}
-              <div className="absolute bottom-4 left-4 right-4 text-white">
-                <h3 className="text-xl md:text-2xl font-bold tracking-wider mb-1">{heroImages[3]?.alt || "Bridal Collection"}</h3>
-                <p className="text-sm opacity-90">{heroImages[3]?.category || "Bridal"}</p>
-                <div className="flex items-center mt-2 space-x-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <div className="absolute bottom-2 sm:bottom-4 left-2 sm:left-4 right-2 sm:right-4 text-white">
+                <h3 className="text-sm sm:text-lg md:text-xl lg:text-2xl font-bold tracking-wider mb-0.5 sm:mb-1 truncate">{heroImages[3]?.alt || "Bridal Collection"}</h3>
+                <p className="text-xs sm:text-sm opacity-90">{heroImages[3]?.category || "Bridal"}</p>
+                <div className="hidden sm:flex items-center mt-2 space-x-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                   <span className="text-xs bg-pink-500 px-2 py-1 rounded-full">Gallery</span>
                 </div>
               </div>
