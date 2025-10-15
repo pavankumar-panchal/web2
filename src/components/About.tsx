@@ -8,13 +8,13 @@ const About = () => {
               About Me
             </h2>
             <p className="text-muted-foreground text-lg leading-relaxed">
-              Welcome to STYLISTIC - where passion meets professionalism. I'm a versatile model and content creator with expertise spanning fashion, beauty, and bridal modeling. My journey in the modeling industry has taken me through prestigious fashion weeks and film festivals, allowing me to work with renowned brands and creative teams worldwide.
+              I'm an entrepreneur and fashion professional with an international modeling background and over eight years of experience in the agency business. This journey has shaped my perspective on both the creative and business sides of fashion, allowing me to experience the industry from every angle.
             </p>
             <p className="text-muted-foreground text-lg leading-relaxed">
-              Beyond traditional modeling, I specialize in UGC (User Generated Content) and content creation, producing authentic and engaging visual stories that resonate with diverse audiences. Whether it's high-fashion editorials, beauty campaigns, or collaborative brand content, I bring dedication, creativity, and professionalism to every project.
+              I specialize in high-quality, visually aesthetic content that blends creativity with strategy, focusing on fashion, beauty and lifestyle on Instagram. Beyond digital collaborations, I work with select projects in modeling, fashion and TV.
             </p>
             <p className="text-muted-foreground text-lg leading-relaxed">
-              My commitment to excellence and my ability to adapt to various creative visions have established me as a trusted collaborator in the fashion and content creation space. I believe in creating meaningful connections through visual storytelling and bringing brands' visions to life with authenticity and style.
+              As a true animal lover and proud cat mama, I enjoy life's simple moments as much as its big adventures.
             </p>
           </div>
 

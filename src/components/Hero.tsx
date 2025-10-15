@@ -74,10 +74,10 @@ const Hero = () => {
             STYLISTIC
           </h1>
           
-          {/* Subtitle */}
-          <p className="text-white text-lg md:text-xl lg:text-2xl mb-12 tracking-wider opacity-90 font-light animate-fade-in text-center max-w-2xl"
+          {/* Bio Text */}
+          <p className="text-white text-base md:text-lg leading-relaxed mb-12 opacity-90 font-light animate-fade-in text-center max-w-3xl px-6"
              style={{ animationDelay: '0.6s' }}>
-            A PROFESSIONAL MODEL AGENCY
+            I'm an entrepreneur and fashion professional who combines an international modeling background with over eight years in the agency business to create captivating brand content. I specialize in high-quality visuals with a refined aesthetic, focusing on fashion, beauty, and lifestyle on Instagram. Beyond digital collaborations, I work with select projects in modeling, fashion and TV - and as a true animal lover and proud cat mama, I enjoy life's simple moments as much as its big adventures.
           </p>
           
           {/* CTA Button */}
@@ -92,7 +92,7 @@ const Hero = () => {
               animationDelay: '0.9s'                                                                                                            
             }}
           >
-            Become A Model                                                                                                          
+            Get In Touch                                                                                                          
           </button>
         </div>
       </div>
