@@ -58,7 +58,7 @@ const Header = () => {
                   {['Modelling', 'UGC & Content', 'About Me', 'Contact'].map((item, index) => (
                     <button
                       key={item}
-                      onClick={() => scrollToSection(item === 'Modelling' || item === 'UGC & Content Creation' ? 'services' : item === 'About Me' ? 'about' : 'contact')}
+                      onClick={() => scrollToSection(item === 'Modelling' || item === 'UGC & Content' ? 'services' : item === 'About Me' ? 'about' : 'contact')}
                       className="group relative block w-full text-left text-white text-3xl md:text-4xl font-light tracking-widest transition-all duration-500 hover:translate-x-4 overflow-hidden"
                       style={{ 
                         animationDelay: `${index * 0.1}s`,
