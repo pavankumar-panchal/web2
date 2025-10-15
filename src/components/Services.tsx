@@ -21,10 +21,10 @@ const Services = () => {
       <div className="container mx-auto max-w-7xl">
         <div className="text-center mb-16 animate-fade-in">
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            Our Services
+            My Services
           </h2>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Comprehensive modeling solutions for both aspiring models and leading brands seeking exceptional talent.
+            Professional modeling and content creation services tailored to bring your brand vision to life.
           </p>
         </div>
 

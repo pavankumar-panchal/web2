@@ -20,27 +20,27 @@ const About = () => {
 
           <div className="grid grid-cols-2 gap-6">
             <div className="bg-card p-6 rounded-lg border border-border hover:border-primary transition-all duration-300 hover:scale-105">
-              <div className="text-4xl font-bold text-primary mb-2">500+</div>
-              <div className="text-sm uppercase tracking-wider text-muted-foreground">
-                Models Represented
-              </div>
-            </div>
-            <div className="bg-card p-6 rounded-lg border border-border hover:border-primary transition-all duration-300 hover:scale-105">
-              <div className="text-4xl font-bold text-primary mb-2">15+</div>
+              <div className="text-4xl font-bold text-primary mb-2">8+</div>
               <div className="text-sm uppercase tracking-wider text-muted-foreground">
                 Years Experience
               </div>
             </div>
             <div className="bg-card p-6 rounded-lg border border-border hover:border-primary transition-all duration-300 hover:scale-105">
-              <div className="text-4xl font-bold text-primary mb-2">1000+</div>
+              <div className="text-4xl font-bold text-primary mb-2">100+</div>
               <div className="text-sm uppercase tracking-wider text-muted-foreground">
-                Successful Campaigns
+                Projects Completed
               </div>
             </div>
             <div className="bg-card p-6 rounded-lg border border-border hover:border-primary transition-all duration-300 hover:scale-105">
               <div className="text-4xl font-bold text-primary mb-2">50+</div>
               <div className="text-sm uppercase tracking-wider text-muted-foreground">
-                Fashion Brands
+                Brand Collaborations
+              </div>
+            </div>
+            <div className="bg-card p-6 rounded-lg border border-border hover:border-primary transition-all duration-300 hover:scale-105">
+              <div className="text-4xl font-bold text-primary mb-2">10K+</div>
+              <div className="text-sm uppercase tracking-wider text-muted-foreground">
+                Content Created
               </div>
             </div>
           </div>
