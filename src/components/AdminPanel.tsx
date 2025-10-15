@@ -141,10 +141,31 @@ const AdminPanel = ({ isOpen, onClose }: AdminPanelProps) => {
 
   const handleSubmitGallery = (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Validate that image source exists
+    if (!formData.src || formData.src.trim() === '') {
+      alert('Please upload an image or select one from the library');
+      return;
+    }
+    
+    // Validate that alt text exists
+    if (!formData.alt || formData.alt.trim() === '') {
+      alert('Please provide an image description');
+      return;
+    }
+    
+    // Validate that category exists
+    if (!formData.category || formData.category.trim() === '') {
+      alert('Please select a category');
+      return;
+    }
+    
     if (editingId) {
       updateGalleryImage(editingId, formData);
+      alert('Image updated successfully!');
     } else {
       addGalleryImage(formData);
+      alert('Image added successfully!');
     }
     setFormData({});
     setEditingId(null);
@@ -153,10 +174,25 @@ const AdminPanel = ({ isOpen, onClose }: AdminPanelProps) => {
 
   const handleSubmitVideo = (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Validate that video source exists
+    if (!formData.src || formData.src.trim() === '') {
+      alert('Please upload a video or select one from the library');
+      return;
+    }
+    
+    // Validate that description exists
+    if (!formData.alt || formData.alt.trim() === '') {
+      alert('Please provide a video description');
+      return;
+    }
+    
     if (editingId) {
       updateVideo(editingId, formData);
+      alert('Video updated successfully!');
     } else {
       addVideo(formData);
+      alert('Video added successfully!');
     }
     setFormData({});
     setEditingId(null);
@@ -167,14 +203,50 @@ const AdminPanel = ({ isOpen, onClose }: AdminPanelProps) => {
 
   const handleSubmitNavbar = (e: React.FormEvent) => {
     e.preventDefault();
-    updateNavbar(formData);
+    
+    // Create data object with current values or form values
+    const dataToSubmit = {
+      title: formData.title !== undefined ? formData.title : navbarData.title,
+      subtitle: formData.subtitle !== undefined ? formData.subtitle : navbarData.subtitle
+    };
+    
+    // Validate
+    if (!dataToSubmit.title || dataToSubmit.title.trim() === '') {
+      alert('Please provide a title');
+      return;
+    }
+    if (!dataToSubmit.subtitle || dataToSubmit.subtitle.trim() === '') {
+      alert('Please provide a subtitle');
+      return;
+    }
+    
+    updateNavbar(dataToSubmit);
     setFormData({});
+    alert('Navbar updated successfully!');
   };
 
   const handleSubmitVideoSection = (e: React.FormEvent) => {
     e.preventDefault();
-    updateVideoSection(formData);
+    
+    // Create data object with current values or form values
+    const dataToSubmit = {
+      mainTitle: formData.mainTitle !== undefined ? formData.mainTitle : videoSectionData.mainTitle,
+      mainDescription: formData.mainDescription !== undefined ? formData.mainDescription : videoSectionData.mainDescription,
+      contentTitle: formData.contentTitle !== undefined ? formData.contentTitle : videoSectionData.contentTitle,
+      contentDescription: formData.contentDescription !== undefined ? formData.contentDescription : videoSectionData.contentDescription,
+      galleryTitle: formData.galleryTitle !== undefined ? formData.galleryTitle : videoSectionData.galleryTitle,
+      galleryDescription: formData.galleryDescription !== undefined ? formData.galleryDescription : videoSectionData.galleryDescription
+    };
+    
+    // Validate all fields
+    if (!dataToSubmit.mainTitle || dataToSubmit.mainTitle.trim() === '') {
+      alert('Please provide a main title');
+      return;
+    }
+    
+    updateVideoSection(dataToSubmit);
     setFormData({});
+    alert('Video section updated successfully!');
   };
 
   const handleEdit = (item: any, type: string) => {
