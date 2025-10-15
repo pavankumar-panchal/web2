@@ -37,6 +37,9 @@ const AdminPanel = ({ isOpen, onClose }: AdminPanelProps) => {
     'model2.jpeg',
     'model3.jpeg',
     'model4.jpeg',
+    'model5.jpeg',
+    'model6.jpeg',
+    'model7.jpeg',
     'poster.jpeg'
   ];
 
@@ -194,69 +197,69 @@ const AdminPanel = ({ isOpen, onClose }: AdminPanelProps) => {
   };
 
   return (
-    <div className="fixed inset-0 z-[9999] bg-black/90 backdrop-blur-sm flex items-center justify-center p-4">
-      <div className="bg-background border border-border rounded-lg w-full max-w-6xl max-h-[90vh] overflow-hidden flex flex-col">
+    <div className="fixed inset-0 z-[9999] bg-black/90 backdrop-blur-sm flex items-center justify-center p-2 sm:p-4">
+      <div className="bg-background border border-border rounded-lg w-full max-w-6xl max-h-[95vh] sm:max-h-[90vh] overflow-hidden flex flex-col">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-border bg-secondary/30">
-          <h2 className="text-2xl font-bold">Admin Panel - Riina Seise Portfolio</h2>
+        <div className="flex items-center justify-between p-3 sm:p-6 border-b border-border bg-secondary/30">
+          <h2 className="text-lg sm:text-2xl font-bold truncate">Admin Panel - Riina Seise Portfolio</h2>
           <button
             onClick={onClose}
-            className="p-2 hover:bg-secondary rounded-full transition-colors"
+            className="p-2 hover:bg-secondary rounded-full transition-colors flex-shrink-0"
           >
-            <X className="w-6 h-6" />
+            <X className="w-5 h-5 sm:w-6 sm:h-6" />
           </button>
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-2 p-4 border-b border-border bg-secondary/20">
+        <div className="flex gap-1 sm:gap-2 p-2 sm:p-4 border-b border-border bg-secondary/20 overflow-x-auto">
           <button
             onClick={() => setActiveTab('gallery')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${
+            className={`flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 rounded-lg transition-all whitespace-nowrap text-sm sm:text-base ${
               activeTab === 'gallery'
                 ? 'bg-pink-500 text-white'
                 : 'bg-secondary hover:bg-secondary/70'
             }`}
           >
-            <ImageIcon className="w-4 h-4" />
-            Gallery Images
+            <ImageIcon className="w-4 h-4 flex-shrink-0" />
+            <span className="hidden xs:inline">Gallery</span>
           </button>
           <button
             onClick={() => setActiveTab('videos')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${
+            className={`flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 rounded-lg transition-all whitespace-nowrap text-sm sm:text-base ${
               activeTab === 'videos'
                 ? 'bg-pink-500 text-white'
                 : 'bg-secondary hover:bg-secondary/70'
             }`}
           >
-            <VideoIcon className="w-4 h-4" />
-            Videos
+            <VideoIcon className="w-4 h-4 flex-shrink-0" />
+            <span className="hidden xs:inline">Videos</span>
           </button>
           <button
             onClick={() => setActiveTab('navbar')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${
+            className={`flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 rounded-lg transition-all whitespace-nowrap text-sm sm:text-base ${
               activeTab === 'navbar'
                 ? 'bg-pink-500 text-white'
                 : 'bg-secondary hover:bg-secondary/70'
             }`}
           >
-            <Navigation className="w-4 h-4" />
-            Navbar
+            <Navigation className="w-4 h-4 flex-shrink-0" />
+            <span className="hidden xs:inline">Navbar</span>
           </button>
           <button
             onClick={() => setActiveTab('videoSection')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${
+            className={`flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 rounded-lg transition-all whitespace-nowrap text-sm sm:text-base ${
               activeTab === 'videoSection'
                 ? 'bg-pink-500 text-white'
                 : 'bg-secondary hover:bg-secondary/70'
             }`}
           >
-            <VideoIcon className="w-4 h-4" />
-            Video Section
+            <VideoIcon className="w-4 h-4 flex-shrink-0" />
+            <span className="hidden xs:inline">Video Section</span>
           </button>
         </div>
 
         {/* Content */}
-        <div className="flex-1 overflow-y-auto p-6">
+        <div className="flex-1 overflow-y-auto p-3 sm:p-6">
           {/* Gallery Tab */}
           {activeTab === 'gallery' && (
             <div className="space-y-6">
@@ -359,10 +362,10 @@ const AdminPanel = ({ isOpen, onClose }: AdminPanelProps) => {
                       <option value="Editorial">Editorial</option>
                     </select>
                   </div>
-                  <div className="flex gap-2">
+                  <div className="flex flex-col sm:flex-row gap-2">
                     <button
                       type="submit"
-                      className="flex items-center gap-2 px-6 py-2 bg-pink-500 hover:bg-pink-600 text-white rounded-lg transition-colors"
+                      className="flex items-center justify-center gap-2 px-4 sm:px-6 py-2 bg-pink-500 hover:bg-pink-600 text-white rounded-lg transition-colors text-sm sm:text-base"
                     >
                       {editingId ? <Save className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
                       {editingId ? 'Update' : 'Add'} Image
@@ -371,7 +374,7 @@ const AdminPanel = ({ isOpen, onClose }: AdminPanelProps) => {
                       <button
                         type="button"
                         onClick={handleCancel}
-                        className="px-6 py-2 bg-secondary hover:bg-secondary/70 rounded-lg transition-colors"
+                        className="px-4 sm:px-6 py-2 bg-secondary hover:bg-secondary/70 rounded-lg transition-colors text-sm sm:text-base"
                       >
                         Cancel
                       </button>
@@ -380,29 +383,29 @@ const AdminPanel = ({ isOpen, onClose }: AdminPanelProps) => {
                 </form>
               </div>
 
-              <div className="bg-secondary/30 p-6 rounded-lg">
-                <h3 className="text-xl font-bold mb-4">Gallery Images ({galleryImages.length})</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-h-[400px] overflow-y-auto">
+              <div className="bg-secondary/30 p-3 sm:p-6 rounded-lg">
+                <h3 className="text-lg sm:text-xl font-bold mb-4">Gallery Images ({galleryImages.length})</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 max-h-[400px] overflow-y-auto">
                   {galleryImages.map((image) => (
-                    <div key={image.id} className="bg-background p-4 rounded-lg border border-border">
+                    <div key={image.id} className="bg-background p-3 sm:p-4 rounded-lg border border-border">
                       <img
                         src={image.src}
                         alt={image.alt}
-                        className="w-full h-40 object-cover rounded-lg mb-2"
+                        className="w-full h-32 sm:h-40 object-cover rounded-lg mb-2"
                       />
                       <p className="text-sm font-medium truncate">{image.alt}</p>
                       <p className="text-xs text-muted-foreground">{image.category}</p>
-                      <div className="flex gap-2 mt-3">
+                      <div className="flex flex-col xs:flex-row gap-2 mt-3">
                         <button
                           onClick={() => handleEdit(image, 'gallery')}
-                          className="flex-1 flex items-center justify-center gap-1 px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white text-sm rounded transition-colors"
+                          className="flex-1 flex items-center justify-center gap-1 px-2 sm:px-3 py-1.5 sm:py-1 bg-blue-500 hover:bg-blue-600 text-white text-xs sm:text-sm rounded transition-colors"
                         >
                           <Edit2 className="w-3 h-3" />
                           Edit
                         </button>
                         <button
                           onClick={() => deleteGalleryImage(image.id)}
-                          className="flex-1 flex items-center justify-center gap-1 px-3 py-1 bg-red-500 hover:bg-red-600 text-white text-sm rounded transition-colors"
+                          className="flex-1 flex items-center justify-center gap-1 px-2 sm:px-3 py-1.5 sm:py-1 bg-red-500 hover:bg-red-600 text-white text-xs sm:text-sm rounded transition-colors"
                         >
                           <Trash2 className="w-3 h-3" />
                           Delete
@@ -542,28 +545,28 @@ const AdminPanel = ({ isOpen, onClose }: AdminPanelProps) => {
                 </form>
               </div>
 
-              <div className="bg-secondary/30 p-6 rounded-lg">
-                <h3 className="text-xl font-bold mb-4">Videos ({videos.length})</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[400px] overflow-y-auto">
+              <div className="bg-secondary/30 p-3 sm:p-6 rounded-lg">
+                <h3 className="text-lg sm:text-xl font-bold mb-4">Videos ({videos.length})</h3>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 max-h-[400px] overflow-y-auto">
                   {videos.map((video) => (
-                    <div key={video.id} className="bg-background p-4 rounded-lg border border-border">
+                    <div key={video.id} className="bg-background p-3 sm:p-4 rounded-lg border border-border">
                       <video
                         src={video.src}
-                        className="w-full h-40 object-cover rounded-lg mb-2"
+                        className="w-full h-32 sm:h-40 object-cover rounded-lg mb-2"
                         controls
                       />
                       <p className="text-sm font-medium truncate">{video.alt}</p>
-                      <div className="flex gap-2 mt-3">
+                      <div className="flex flex-col xs:flex-row gap-2 mt-3">
                         <button
                           onClick={() => handleEdit(video, 'video')}
-                          className="flex-1 flex items-center justify-center gap-1 px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white text-sm rounded transition-colors"
+                          className="flex-1 flex items-center justify-center gap-1 px-2 sm:px-3 py-1.5 sm:py-1 bg-blue-500 hover:bg-blue-600 text-white text-xs sm:text-sm rounded transition-colors"
                         >
                           <Edit2 className="w-3 h-3" />
                           Edit
                         </button>
                         <button
                           onClick={() => deleteVideo(video.id)}
-                          className="flex-1 flex items-center justify-center gap-1 px-3 py-1 bg-red-500 hover:bg-red-600 text-white text-sm rounded transition-colors"
+                          className="flex-1 flex items-center justify-center gap-1 px-2 sm:px-3 py-1.5 sm:py-1 bg-red-500 hover:bg-red-600 text-white text-xs sm:text-sm rounded transition-colors"
                         >
                           <Trash2 className="w-3 h-3" />
                           Delete
