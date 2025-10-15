@@ -24,6 +24,55 @@ const AdminPanel = ({ isOpen, onClose }: AdminPanelProps) => {
   const [activeTab, setActiveTab] = useState<'gallery' | 'videos' | 'navbar'>('gallery');
   const [editingId, setEditingId] = useState<number | null>(null);
   const [formData, setFormData] = useState<any>({});
+  const [imagePreview, setImagePreview] = useState<string>('');
+  const [videoPreview, setVideoPreview] = useState<string>('');
+
+  // Available images in public folder
+  const availableImages = [
+    'model1.jpeg',
+    'model2.jpeg',
+    'model3.jpeg',
+    'model4.jpeg',
+    'poster.jpeg'
+  ];
+
+  // Available videos in public folder
+  const availableVideos = [
+    'video1.mp4',
+    'video2.mp4',
+    'video3.mp4',
+    'video4.mp4'
+  ];
+
+  const base = import.meta.env.BASE_URL;
+
+  // Handle image file upload
+  const handleImageFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const result = reader.result as string;
+        setImagePreview(result);
+        setFormData({ ...formData, src: result });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  // Handle video file upload
+  const handleVideoFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const result = reader.result as string;
+        setVideoPreview(result);
+        setFormData({ ...formData, src: result });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   if (!isOpen) return null;
 
@@ -127,15 +176,70 @@ const AdminPanel = ({ isOpen, onClose }: AdminPanelProps) => {
                 </h3>
                 <form onSubmit={handleSubmitGallery} className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium mb-2">Image URL</label>
-                    <input
-                      type="text"
-                      value={formData.src || ''}
-                      onChange={(e) => setFormData({ ...formData, src: e.target.value })}
-                      className="w-full px-4 py-2 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500"
-                      placeholder={`${import.meta.env.BASE_URL}image.jpg`}
-                      required
-                    />
+                    <label className="block text-sm font-medium mb-2">Upload Image</label>
+                    <div className="space-y-3">
+                      {/* File Upload */}
+                      <div className="flex items-center gap-3">
+                        <label className="flex-1 cursor-pointer">
+                          <div className="flex items-center justify-center w-full px-4 py-3 border-2 border-dashed border-border rounded-lg hover:border-pink-500 transition-colors bg-secondary/30">
+                            <div className="text-center">
+                              <ImageIcon className="w-8 h-8 mx-auto mb-2 text-muted-foreground" />
+                              <p className="text-sm text-muted-foreground">
+                                Click to upload image
+                              </p>
+                              <p className="text-xs text-muted-foreground mt-1">
+                                PNG, JPG, JPEG up to 10MB
+                              </p>
+                            </div>
+                          </div>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleImageFileChange}
+                            className="hidden"
+                          />
+                        </label>
+                      </div>
+
+                      {/* Or Select from Library */}
+                      <div className="relative">
+                        <div className="absolute inset-0 flex items-center">
+                          <div className="w-full border-t border-border"></div>
+                        </div>
+                        <div className="relative flex justify-center text-xs">
+                          <span className="bg-background px-2 text-muted-foreground">OR SELECT FROM LIBRARY</span>
+                        </div>
+                      </div>
+
+                      <select
+                        value={formData.src?.replace(base, '') || ''}
+                        onChange={(e) => {
+                          const src = e.target.value ? `${base}${e.target.value}` : '';
+                          setFormData({ ...formData, src });
+                          setImagePreview(src);
+                        }}
+                        className="w-full px-4 py-2 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500"
+                      >
+                        <option value="">Select from existing images</option>
+                        {availableImages.map((img) => (
+                          <option key={img} value={img}>
+                            {img}
+                          </option>
+                        ))}
+                      </select>
+
+                      {/* Preview */}
+                      {(imagePreview || formData.src) && (
+                        <div className="mt-2 p-3 bg-secondary/50 rounded-lg border border-border">
+                          <p className="text-xs text-muted-foreground mb-2">Preview:</p>
+                          <img 
+                            src={imagePreview || formData.src} 
+                            alt="Preview" 
+                            className="w-full h-48 object-cover rounded"
+                          />
+                        </div>
+                      )}
+                    </div>
                   </div>
                   <div>
                     <label className="block text-sm font-medium mb-2">Alt Text / Description</label>
@@ -230,15 +334,70 @@ const AdminPanel = ({ isOpen, onClose }: AdminPanelProps) => {
                 </h3>
                 <form onSubmit={handleSubmitVideo} className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium mb-2">Video URL</label>
-                    <input
-                      type="text"
-                      value={formData.src || ''}
-                      onChange={(e) => setFormData({ ...formData, src: e.target.value })}
-                      className="w-full px-4 py-2 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500"
-                      placeholder={`${import.meta.env.BASE_URL}video.mp4`}
-                      required
-                    />
+                    <label className="block text-sm font-medium mb-2">Upload Video</label>
+                    <div className="space-y-3">
+                      {/* File Upload */}
+                      <div className="flex items-center gap-3">
+                        <label className="flex-1 cursor-pointer">
+                          <div className="flex items-center justify-center w-full px-4 py-3 border-2 border-dashed border-border rounded-lg hover:border-pink-500 transition-colors bg-secondary/30">
+                            <div className="text-center">
+                              <VideoIcon className="w-8 h-8 mx-auto mb-2 text-muted-foreground" />
+                              <p className="text-sm text-muted-foreground">
+                                Click to upload video
+                              </p>
+                              <p className="text-xs text-muted-foreground mt-1">
+                                MP4, WebM, MOV up to 50MB
+                              </p>
+                            </div>
+                          </div>
+                          <input
+                            type="file"
+                            accept="video/*"
+                            onChange={handleVideoFileChange}
+                            className="hidden"
+                          />
+                        </label>
+                      </div>
+
+                      {/* Or Select from Library */}
+                      <div className="relative">
+                        <div className="absolute inset-0 flex items-center">
+                          <div className="w-full border-t border-border"></div>
+                        </div>
+                        <div className="relative flex justify-center text-xs">
+                          <span className="bg-background px-2 text-muted-foreground">OR SELECT FROM LIBRARY</span>
+                        </div>
+                      </div>
+
+                      <select
+                        value={formData.src?.replace(base, '') || ''}
+                        onChange={(e) => {
+                          const src = e.target.value ? `${base}${e.target.value}` : '';
+                          setFormData({ ...formData, src });
+                          setVideoPreview(src);
+                        }}
+                        className="w-full px-4 py-2 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500"
+                      >
+                        <option value="">Select from existing videos</option>
+                        {availableVideos.map((vid) => (
+                          <option key={vid} value={vid}>
+                            {vid}
+                          </option>
+                        ))}
+                      </select>
+
+                      {/* Preview */}
+                      {(videoPreview || formData.src) && (
+                        <div className="mt-2 p-3 bg-secondary/50 rounded-lg border border-border">
+                          <p className="text-xs text-muted-foreground mb-2">Preview:</p>
+                          <video 
+                            src={videoPreview || formData.src} 
+                            className="w-full h-48 object-cover rounded"
+                            controls
+                          />
+                        </div>
+                      )}
+                    </div>
                   </div>
                   <div>
                     <label className="block text-sm font-medium mb-2">Video Description</label>
