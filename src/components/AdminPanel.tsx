@@ -28,6 +28,8 @@ const AdminPanel = ({ isOpen, onClose }: AdminPanelProps) => {
   const [formData, setFormData] = useState<any>({});
   const [imagePreview, setImagePreview] = useState<string>('');
   const [videoPreview, setVideoPreview] = useState<string>('');
+  const [isUploading, setIsUploading] = useState<boolean>(false);
+  const [uploadProgress, setUploadProgress] = useState<string>('');
 
   // Available images in public folder
   const availableImages = [
@@ -52,11 +54,29 @@ const AdminPanel = ({ isOpen, onClose }: AdminPanelProps) => {
   const handleImageFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      // Validate file type
+      const validImageTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+      if (!validImageTypes.includes(file.type)) {
+        alert('Please upload a valid image file (JPEG, PNG, GIF, WebP)');
+        return;
+      }
+
+      // Validate file size (max 10MB)
+      const maxSize = 10 * 1024 * 1024; // 10MB in bytes
+      if (file.size > maxSize) {
+        alert(`Image file is too large (${(file.size / (1024 * 1024)).toFixed(2)}MB). Maximum size is 10MB.`);
+        return;
+      }
+
       const reader = new FileReader();
       reader.onloadend = () => {
         const result = reader.result as string;
         setImagePreview(result);
         setFormData({ ...formData, src: result });
+      };
+      reader.onerror = () => {
+        alert('Error uploading image. Please try again.');
+        console.error('Image upload error:', reader.error);
       };
       reader.readAsDataURL(file);
     }
@@ -66,11 +86,49 @@ const AdminPanel = ({ isOpen, onClose }: AdminPanelProps) => {
   const handleVideoFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      // Validate file type
+      const validVideoTypes = ['video/mp4', 'video/webm', 'video/ogg', 'video/quicktime'];
+      if (!validVideoTypes.includes(file.type)) {
+        alert('Please upload a valid video file (MP4, WebM, MOV, OGG)');
+        return;
+      }
+
+      // Validate file size (max 100MB for better compatibility)
+      const maxSize = 100 * 1024 * 1024; // 100MB in bytes
+      if (file.size > maxSize) {
+        alert(`Video file is too large (${(file.size / (1024 * 1024)).toFixed(2)}MB). Maximum size is 100MB. Please compress your video or use a smaller file.`);
+        return;
+      }
+
+      // Show file size info
+      const fileSizeMB = (file.size / (1024 * 1024)).toFixed(2);
+      setUploadProgress(`Preparing to upload ${file.name} (${fileSizeMB}MB)...`);
+      setIsUploading(true);
+
       const reader = new FileReader();
+      reader.onloadstart = () => {
+        setUploadProgress('Starting video upload...');
+      };
+      reader.onprogress = (event) => {
+        if (event.lengthComputable) {
+          const percentComplete = ((event.loaded / event.total) * 100).toFixed(0);
+          setUploadProgress(`Uploading... ${percentComplete}%`);
+        }
+      };
       reader.onloadend = () => {
         const result = reader.result as string;
+        setUploadProgress('Video uploaded successfully! ✓');
         setVideoPreview(result);
         setFormData({ ...formData, src: result });
+        setIsUploading(false);
+        setTimeout(() => setUploadProgress(''), 3000);
+      };
+      reader.onerror = () => {
+        alert('Error uploading video. Please try again or use a smaller file.');
+        console.error('Video upload error:', reader.error);
+        setUploadProgress('Upload failed!');
+        setIsUploading(false);
+        setTimeout(() => setUploadProgress(''), 3000);
       };
       reader.readAsDataURL(file);
     }
@@ -87,6 +145,7 @@ const AdminPanel = ({ isOpen, onClose }: AdminPanelProps) => {
     }
     setFormData({});
     setEditingId(null);
+    setImagePreview('');
   };
 
   const handleSubmitVideo = (e: React.FormEvent) => {
@@ -98,6 +157,9 @@ const AdminPanel = ({ isOpen, onClose }: AdminPanelProps) => {
     }
     setFormData({});
     setEditingId(null);
+    setVideoPreview('');
+    setUploadProgress('');
+    setIsUploading(false);
   };
 
   const handleSubmitNavbar = (e: React.FormEvent) => {
@@ -115,11 +177,20 @@ const AdminPanel = ({ isOpen, onClose }: AdminPanelProps) => {
   const handleEdit = (item: any, type: string) => {
     setEditingId(item.id);
     setFormData(item);
+    if (type === 'gallery') {
+      setImagePreview(item.src);
+    } else if (type === 'video') {
+      setVideoPreview(item.src);
+    }
   };
 
   const handleCancel = () => {
     setEditingId(null);
     setFormData({});
+    setImagePreview('');
+    setVideoPreview('');
+    setUploadProgress('');
+    setIsUploading(false);
   };
 
   return (
@@ -207,13 +278,13 @@ const AdminPanel = ({ isOpen, onClose }: AdminPanelProps) => {
                                 Click to upload image
                               </p>
                               <p className="text-xs text-muted-foreground mt-1">
-                                PNG, JPG, JPEG up to 10MB
+                                JPEG, PNG, GIF, WebP up to 10MB
                               </p>
                             </div>
                           </div>
                           <input
                             type="file"
-                            accept="image/*"
+                            accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
                             onChange={handleImageFileChange}
                             className="hidden"
                           />
@@ -365,13 +436,16 @@ const AdminPanel = ({ isOpen, onClose }: AdminPanelProps) => {
                                 Click to upload video
                               </p>
                               <p className="text-xs text-muted-foreground mt-1">
-                                MP4, WebM, MOV up to 50MB
+                                MP4, WebM, MOV, OGG up to 100MB
+                              </p>
+                              <p className="text-xs text-pink-500 mt-1">
+                                ⚠ Large files may take time to upload
                               </p>
                             </div>
                           </div>
                           <input
                             type="file"
-                            accept="video/*"
+                            accept="video/mp4,video/webm,video/ogg,video/quicktime"
                             onChange={handleVideoFileChange}
                             className="hidden"
                           />
@@ -404,6 +478,24 @@ const AdminPanel = ({ isOpen, onClose }: AdminPanelProps) => {
                           </option>
                         ))}
                       </select>
+
+                      {/* Upload Progress */}
+                      {uploadProgress && (
+                        <div className={`p-3 rounded-lg border ${
+                          uploadProgress.includes('✓') 
+                            ? 'bg-green-500/10 border-green-500/50 text-green-500' 
+                            : uploadProgress.includes('failed') 
+                            ? 'bg-red-500/10 border-red-500/50 text-red-500'
+                            : 'bg-blue-500/10 border-blue-500/50 text-blue-500'
+                        }`}>
+                          <p className="text-sm font-medium">{uploadProgress}</p>
+                          {isUploading && (
+                            <div className="mt-2 w-full bg-background/50 rounded-full h-2">
+                              <div className="bg-pink-500 h-2 rounded-full animate-pulse" style={{ width: '100%' }}></div>
+                            </div>
+                          )}
+                        </div>
+                      )}
 
                       {/* Preview */}
                       {(videoPreview || formData.src) && (
