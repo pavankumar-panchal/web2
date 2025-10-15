@@ -4,11 +4,12 @@ const Hero = () => {
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
   
   // Array of background videos
+  const base = import.meta.env.BASE_URL;
   const backgroundVideos = [
-    "/video1.mp4",
-    "/video2.mp4", 
-    "/video3.mp4",
-    "/video4.mp4"
+    `${base}video1.mp4`,
+    `${base}video2.mp4`,
+    `${base}video3.mp4`,
+    `${base}video4.mp4`
   ];
 
   // Auto-rotate background videos every 10 seconds
@@ -118,7 +119,7 @@ const Hero = () => {
             {/* Model 1 - ANDREA */}
             <div className="media-card rounded-xl group cursor-pointer shadow-xl parallel-anim" style={{ height: '430px' }}>
               <img 
-                src="/model1.jpeg"
+                src={`${base}model1.jpeg`}
                 alt="Andrea"
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
               />
@@ -140,7 +141,7 @@ const Hero = () => {
             {/* Model 2 - NICOLE */}
             <div className="media-card rounded-xl group cursor-pointer shadow-xl parallel-anim" style={{ height: '430px', animationDelay:'80ms' }}>
               <img 
-                src="/model2.jpeg"
+                src={`${base}model2.jpeg`}
                 alt="Nicole"
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
               />
@@ -162,7 +163,7 @@ const Hero = () => {
             {/* Model 3 - SMITH with Enhanced Stats */}
             <div className="media-card rounded-xl group cursor-pointer shadow-xl parallel-anim" style={{ height: '430px', animationDelay:'160ms' }}>
               <img 
-                src="/model3.jpeg"
+                src={`${base}model3.jpeg`}
                 alt="Smith"
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
               />
@@ -215,7 +216,7 @@ const Hero = () => {
             {/* Model 4 - JANNAH */}
             <div className="media-card rounded-xl group cursor-pointer shadow-xl parallel-anim" style={{ height: '430px', animationDelay:'240ms' }}>
               <img 
-                src="/model4.jpeg"
+                src={`${base}model4.jpeg`}
                 alt="Jannah"
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
               />
