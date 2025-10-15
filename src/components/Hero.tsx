@@ -1,33 +1,14 @@
-import { useState, useEffect } from "react";
 import { useAdmin } from "../contexts/AdminContext";
 
 const Hero = () => {
-  const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
-  const [isTransitioning, setIsTransitioning] = useState(false);
   const { videos, galleryImages } = useAdmin();
   const base = import.meta.env.BASE_URL;
   
-  // Get background videos from admin context
-  const backgroundVideos = videos.map(v => v.src);
+  // Get first video for continuous background playback
+  const backgroundVideo = videos.length > 0 ? videos[0].src : `${base}video1.mp4`;
   
   // Get first 4 gallery images for hero showcase
   const heroImages = galleryImages.slice(0, 4);
-
-  // Auto-rotate background videos every 8 seconds with professional timing
-  useEffect(() => {
-    if (backgroundVideos.length <= 1) return; // Don't rotate if only one video
-    
-    const interval = setInterval(() => {
-      setIsTransitioning(true);
-      // Delay the actual index change slightly for smoother transition
-      setTimeout(() => {
-        setCurrentVideoIndex((prevIndex) => (prevIndex + 1) % backgroundVideos.length);
-        setIsTransitioning(false);
-      }, 300);
-    }, 8000); // Change every 8 seconds for better pacing
-    
-    return () => clearInterval(interval);
-  }, [backgroundVideos.length]);
 
   const scrollToContact = () => {
     const element = document.getElementById("contact");
@@ -42,51 +23,18 @@ const Hero = () => {
       className="relative flex flex-col overflow-visible"
       style={{ minHeight: 'calc(100vh + 300px)' }}
     >
-      {/* Background Video Layers with Professional Transitions */}
+      {/* Continuous Background Video */}
       <div className="absolute inset-0 z-0 overflow-hidden">
-        {backgroundVideos.map((video, index) => {
-          const isActive = index === currentVideoIndex;
-          const isPrevious = index === (currentVideoIndex - 1 + backgroundVideos.length) % backgroundVideos.length;
-          
-          return (
-            <video 
-              key={`${video}-${index}`}
-              className={`absolute w-full h-full object-cover transition-all duration-[2000ms] ease-in-out ${
-                isActive 
-                  ? 'opacity-100 scale-100' 
-                  : isPrevious 
-                  ? 'opacity-0 scale-105' 
-                  : 'opacity-0 scale-100'
-              }`}
-              style={{
-                transform: isActive ? 'scale(1)' : 'scale(1.05)',
-                transition: 'opacity 2s ease-in-out, transform 10s ease-out',
-              }}
-              muted
-              loop
-              autoPlay
-              playsInline
-              preload="auto"
-              onLoadedData={(e) => {
-                // Ensure video plays smoothly
-                const videoElement = e.target as HTMLVideoElement;
-                if (isActive) {
-                  videoElement.play().catch(() => {
-                    // Handle autoplay restrictions
-                  });
-                }
-              }}
-              onEnded={(e) => {
-                // Ensure continuous looping
-                const videoElement = e.target as HTMLVideoElement;
-                videoElement.currentTime = 0;
-                videoElement.play();
-              }}
-            >
-              <source src={video} type="video/mp4" />
-            </video>
-          );
-        })}
+        <video 
+          className="absolute w-full h-full object-cover"
+          muted
+          loop
+          autoPlay
+          playsInline
+          preload="auto"
+        >
+          <source src={backgroundVideo} type="video/mp4" />
+        </video>
         
         {/* Professional overlay with gradient for depth */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/50"></div>
@@ -138,30 +86,6 @@ const Hero = () => {
           >
             Get In Touch                                                                                                          
           </button>
-          
-          {/* Video Progress Indicators */}
-          {backgroundVideos.length > 1 && (
-            <div className="mt-8 flex gap-2 items-center animate-fade-in" style={{ animationDelay: '1.2s' }}>
-              {backgroundVideos.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => {
-                    setIsTransitioning(true);
-                    setTimeout(() => {
-                      setCurrentVideoIndex(index);
-                      setIsTransitioning(false);
-                    }, 300);
-                  }}
-                  className={`transition-all duration-500 rounded-full ${
-                    index === currentVideoIndex 
-                      ? 'bg-pink-500 w-12 h-1.5 shadow-lg shadow-pink-500/50' 
-                      : 'bg-white/40 hover:bg-white/60 w-8 h-1.5'
-                  }`}
-                  aria-label={`Switch to video ${index + 1}`}
-                />
-              ))}
-            </div>
-          )}
         </div>
       </div>
 
