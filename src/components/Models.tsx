@@ -1,33 +1,9 @@
 import { useState } from "react";
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react";
+import { useAdmin } from "../contexts/AdminContext";
 
 const Models = () => {
-  const base = import.meta.env.BASE_URL;
-  
-  // Generate gallery images - simulating 1000+ images
-  // Replace this with your actual image data/API
-  const generateGalleryImages = () => {
-    const images = [];
-    const categories = ["Fashion", "Beauty", "Bridal", "Content", "Lifestyle"];
-    const actualImages = ["model1.jpeg", "model2.jpeg", "model3.jpeg", "model4.jpeg"];
-    
-    // Generate placeholder data for 1000+ images
-    // In production, you would fetch this from your backend/API
-    for (let i = 1; i <= 1200; i++) {
-      const imageFile = actualImages[(i - 1) % actualImages.length];
-      const category = categories[(i - 1) % categories.length];
-      images.push({
-        src: `${base}${imageFile}`,
-        alt: `Portfolio Image ${i}`,
-        category: category,
-        id: i
-      });
-    }
-    return images;
-  };
-
-  const allGalleryImages = generateGalleryImages();
-
+  const { galleryImages: allGalleryImages } = useAdmin();
   const IMAGES_PER_PAGE = 12;
   const [currentPage, setCurrentPage] = useState(1);
 

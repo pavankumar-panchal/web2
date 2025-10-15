@@ -1,19 +1,20 @@
 import { useState, useEffect } from "react";
+import { useAdmin } from "../contexts/AdminContext";
 
 const Hero = () => {
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
-  
-  // Array of background videos
+  const { videos, galleryImages } = useAdmin();
   const base = import.meta.env.BASE_URL;
-  const backgroundVideos = [
-    `${base}video1.mp4`,
-    `${base}video2.mp4`,
-    `${base}video3.mp4`,
-    `${base}video4.mp4`
-  ];
+  
+  // Get background videos from admin context
+  const backgroundVideos = videos.map(v => v.src);
+  
+  // Get first 4 gallery images for hero showcase
+  const heroImages = galleryImages.slice(0, 4);
 
   // Auto-rotate background videos every 10 seconds
   useEffect(() => {
+    if (backgroundVideos.length === 0) return;
     const interval = setInterval(() => {
       setCurrentVideoIndex((prevIndex) => (prevIndex + 1) % backgroundVideos.length);
     }, 10000);
@@ -101,11 +102,11 @@ const Hero = () => {
       <div className="absolute left-0 right-0 z-50" style={{ bottom: '-80px' }}>
         <div className="container mx-auto px-6" style={{ maxWidth: '1600px' }}>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
-            {/* Model 1 - ANDREA */}
+            {/* Image 1 */}
             <div className="media-card rounded-xl group cursor-pointer shadow-xl parallel-anim" style={{ height: '430px' }}>
               <img 
-                src={`${base}model1.jpeg`}
-                alt="Andrea"
+                src={heroImages[0]?.src || `${base}model1.jpeg`}
+                alt={heroImages[0]?.alt || "Fashion Editorial"}
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
               />
               
@@ -114,20 +115,19 @@ const Hero = () => {
               
               {/* Model Info */}
               <div className="absolute bottom-4 left-4 right-4 text-white">
-                <h3 className="text-xl md:text-2xl font-bold tracking-wider mb-1">ANDREA</h3>
-                <p className="text-sm opacity-90">Fashion Model</p>
+                <h3 className="text-xl md:text-2xl font-bold tracking-wider mb-1">{heroImages[0]?.alt || "Fashion Editorial"}</h3>
+                <p className="text-sm opacity-90">{heroImages[0]?.category || "Fashion"}</p>
                 <div className="flex items-center mt-2 space-x-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <span className="text-xs bg-pink-500 px-2 py-1 rounded-full">Available</span>
-                  <span className="text-xs bg-black/50 px-2 py-1 rounded-full">Portfolio</span>
+                  <span className="text-xs bg-pink-500 px-2 py-1 rounded-full">Portfolio</span>
                 </div>
               </div>
             </div>
 
-            {/* Model 2 - NICOLE */}
+            {/* Image 2 */}
             <div className="media-card rounded-xl group cursor-pointer shadow-xl parallel-anim" style={{ height: '430px', animationDelay:'80ms' }}>
               <img 
-                src={`${base}model2.jpeg`}
-                alt="Nicole"
+                src={heroImages[1]?.src || `${base}model2.jpeg`}
+                alt={heroImages[1]?.alt || "Beauty Editorial"}
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
               />
               
@@ -136,73 +136,19 @@ const Hero = () => {
               
               {/* Model Info */}
               <div className="absolute bottom-4 left-4 right-4 text-white">
-                <h3 className="text-xl md:text-2xl font-bold tracking-wider mb-1">NICOLE</h3>
-                <p className="text-sm opacity-90">Editorial Model</p>
+                <h3 className="text-xl md:text-2xl font-bold tracking-wider mb-1">{heroImages[1]?.alt || "Beauty Editorial"}</h3>
+                <p className="text-sm opacity-90">{heroImages[1]?.category || "Beauty"}</p>
                 <div className="flex items-center mt-2 space-x-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                   <span className="text-xs bg-pink-500 px-2 py-1 rounded-full">Featured</span>
-                  <span className="text-xs bg-black/50 px-2 py-1 rounded-full">Gallery</span>
                 </div>
               </div>
             </div>
 
-            {/* Model 3 - SMITH with Enhanced Stats */}
+            {/* Image 3 */}
             <div className="media-card rounded-xl group cursor-pointer shadow-xl parallel-anim" style={{ height: '430px', animationDelay:'160ms' }}>
               <img 
-                src={`${base}model3.jpeg`}
-                alt="Smith"
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-              />
-              
-              {/* Dark Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
-              
-              {/* Default Model Info */}
-              <div className="absolute bottom-4 left-4 right-4 text-white group-hover:opacity-0 transition-opacity duration-300">
-                <h3 className="text-xl md:text-2xl font-bold tracking-wider mb-1">SMITH</h3>
-                <p className="text-sm opacity-90">Professional Model</p>
-              </div>
-              
-              {/* Enhanced Stats Overlay */}
-              <div className="absolute inset-x-0 bottom-0 bg-white/95 backdrop-blur-sm p-4 transform translate-y-full group-hover:translate-y-0 transition-transform duration-500 rounded-t-xl">
-                <h3 className="text-black text-lg font-bold text-center mb-3">SMITH</h3>
-                <div className="grid grid-cols-5 gap-2 text-center">
-                  <div className="bg-pink-50 rounded-lg p-2">
-                    <div className="text-pink-500 font-bold text-xs">HEIGHT</div>
-                    <div className="text-black font-bold text-lg">185</div>
-                    <div className="text-gray-500 text-xs">cm</div>
-                  </div>
-                  <div className="bg-pink-50 rounded-lg p-2">
-                    <div className="text-pink-500 font-bold text-xs">BUST</div>
-                    <div className="text-black font-bold text-lg">79</div>
-                    <div className="text-gray-500 text-xs">cm</div>
-                  </div>
-                  <div className="bg-pink-50 rounded-lg p-2">
-                    <div className="text-pink-500 font-bold text-xs">WAIST</div>
-                    <div className="text-black font-bold text-lg">60</div>
-                    <div className="text-gray-500 text-xs">cm</div>
-                  </div>
-                  <div className="bg-pink-50 rounded-lg p-2">
-                    <div className="text-pink-500 font-bold text-xs">HIPS</div>
-                    <div className="text-black font-bold text-lg">87</div>
-                    <div className="text-gray-500 text-xs">cm</div>
-                  </div>
-                  <div className="bg-pink-50 rounded-lg p-2">
-                    <div className="text-pink-500 font-bold text-xs">SHOE</div>
-                    <div className="text-black font-bold text-lg">40</div>
-                    <div className="text-gray-500 text-xs">EU</div>
-                  </div>
-                </div>
-                <div className="text-center mt-3">
-                  <span className="text-xs bg-pink-500 text-white px-3 py-1 rounded-full">View Details</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Model 4 - JANNAH */}
-            <div className="media-card rounded-xl group cursor-pointer shadow-xl parallel-anim" style={{ height: '430px', animationDelay:'240ms' }}>
-              <img 
-                src={`${base}model4.jpeg`}
-                alt="Jannah"
+                src={heroImages[2]?.src || `${base}model3.jpeg`}
+                alt={heroImages[2]?.alt || "Editorial Shoot"}
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
               />
               
@@ -211,11 +157,31 @@ const Hero = () => {
               
               {/* Model Info */}
               <div className="absolute bottom-4 left-4 right-4 text-white">
-                <h3 className="text-xl md:text-2xl font-bold tracking-wider mb-1">JANNAH</h3>
-                <p className="text-sm opacity-90">Runway Specialist</p>
+                <h3 className="text-xl md:text-2xl font-bold tracking-wider mb-1">{heroImages[2]?.alt || "Editorial Shoot"}</h3>
+                <p className="text-sm opacity-90">{heroImages[2]?.category || "Fashion"}</p>
                 <div className="flex items-center mt-2 space-x-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <span className="text-xs bg-pink-500 px-2 py-1 rounded-full">Top Model</span>
-                  <span className="text-xs bg-black/50 px-2 py-1 rounded-full">Contact</span>
+                  <span className="text-xs bg-pink-500 px-2 py-1 rounded-full">Latest</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Image 4 */}
+            <div className="media-card rounded-xl group cursor-pointer shadow-xl parallel-anim" style={{ height: '430px', animationDelay:'240ms' }}>
+              <img 
+                src={heroImages[3]?.src || `${base}model4.jpeg`}
+                alt={heroImages[3]?.alt || "Bridal Collection"}
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+              />
+              
+              {/* Dark Overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+              
+              {/* Model Info */}
+              <div className="absolute bottom-4 left-4 right-4 text-white">
+                <h3 className="text-xl md:text-2xl font-bold tracking-wider mb-1">{heroImages[3]?.alt || "Bridal Collection"}</h3>
+                <p className="text-sm opacity-90">{heroImages[3]?.category || "Bridal"}</p>
+                <div className="flex items-center mt-2 space-x-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <span className="text-xs bg-pink-500 px-2 py-1 rounded-full">Gallery</span>
                 </div>
               </div>
             </div>

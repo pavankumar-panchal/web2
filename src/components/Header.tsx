@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
+import { useAdmin } from "../contexts/AdminContext";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { navbarData } = useAdmin();
 
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
@@ -17,8 +19,8 @@ const Header = () => {
       <nav className="flex justify-between items-center p-6 md:p-8 mx-4 md:mx-8 relative z-10">
         {/* Logo */}
         <div className="text-white">
-          <h1 className="text-xl md:text-2xl font-bold tracking-widest">RIINA SEISE</h1>
-          <p className="text-xs tracking-wider opacity-80">MODEL & CONTENT CREATOR</p>
+          <h1 className="text-xl md:text-2xl font-bold tracking-widest">{navbarData.title}</h1>
+          <p className="text-xs tracking-wider opacity-80">{navbarData.subtitle}</p>
         </div>
         
         {/* Hamburger Menu */}
