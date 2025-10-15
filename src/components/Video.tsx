@@ -3,66 +3,38 @@ import { useState, useRef, useEffect } from "react";
 import { useAdmin } from "../contexts/AdminContext";
 
 const Video = () => {
-  const { videoSectionData } = useAdmin();
+  const { videoSectionData, videos: adminVideos } = useAdmin();
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
   const videoRef = useRef<HTMLVideoElement>(null);
   const backgroundVideoRef = useRef<HTMLVideoElement>(null);
+  const base = import.meta.env.BASE_URL;
 
-  // Array of 5 portfolio videos
-  const videos = [
+  // Use videos from admin panel, with fallback to default videos
+  const defaultVideos = [
     {
-      id: 1,
-      title: "FASHION EDITORIAL",
-      subtitle: "High Fashion Campaign",
-      duration: "2:30 mins",
-      poster: "/poster.jpeg",
-      videoUrl: "/video1.mp4",
-      backgroundVideo: "/video1.mp4",
-      category: "Fashion"
+      id: "1",
+      src: `${base}video1.mp4`,
+      alt: "Fashion Editorial - High Fashion Campaign"
     },
     {
-      id: 2,
-      title: "RUNWAY COLLECTION",
-      subtitle: "Fashion Week Highlights",
-      duration: "3:15 mins",
-      poster: "/poster.jpeg",
-      videoUrl: "/video2.mp4",
-      backgroundVideo: "/video2.mp4",
-      category: "Runway"
+      id: "2",
+      src: `${base}video2.mp4`,
+      alt: "Runway Collection - Fashion Week Highlights"
     },
     {
-      id: 3,
-      title: "COMMERCIAL CAMPAIGN",
-      subtitle: "Brand Collaboration",
-      duration: "1:45 mins",
-      poster: "/poster.jpeg",
-      videoUrl: "/video3.mp4",
-      backgroundVideo: "/video3.mp4",
-      category: "Commercial"
+      id: "3",
+      src: `${base}video3.mp4`,
+      alt: "Commercial Campaign - Brand Collaboration"
     },
     {
-      id: 4,
-      title: "EDITORIAL SHOOT",
-      subtitle: "Magazine Feature",
-      duration: "4:20 mins",
-      poster: "/poster.jpeg",
-      videoUrl: "/video4.mp4",
-      backgroundVideo: "/video4.mp4",
-      category: "Editorial"
-    },
-    {
-      id: 5,
-      title: "LIFESTYLE CONTENT",
-      subtitle: "UGC & Brand Collaboration",
-      duration: "2:55 mins",
-      poster: "/poster.jpeg",
-      videoUrl: "/video1.mp4",
-      backgroundVideo: "/video1.mp4",
-      category: "Lifestyle"
+      id: "4",
+      src: `${base}video4.mp4`,
+      alt: "Editorial Shoot - Magazine Feature"
     }
   ];
 
+  const videos = adminVideos.length > 0 ? adminVideos : defaultVideos;
   const currentVideo = videos[currentVideoIndex];
 
   // Auto-rotate videos every 8 seconds when not playing
@@ -121,7 +93,7 @@ const Video = () => {
           playsInline
           key={currentVideo.id}
         >
-          <source src={currentVideo.backgroundVideo} type="video/mp4" />
+          <source src={currentVideo.src} type="video/mp4" />
         </video>
         <div className="absolute inset-0 bg-black bg-opacity-60"></div>
       </div>
@@ -163,24 +135,21 @@ const Video = () => {
                 className="w-full object-cover rounded-xl" 
                 style={{ height: '550px' }}
                 controls 
-                poster={currentVideo.poster}
                 preload="metadata"
                 onPlay={() => setIsPlaying(true)}
                 onPause={() => setIsPlaying(false)}
                 onEnded={() => setIsPlaying(false)}
               >
-                <source src={currentVideo.videoUrl} type="video/mp4" />
+                <source src={currentVideo.src} type="video/mp4" />
                 Your browser does not support the video tag.
               </video>
               
               {/* Video Overlay Info */}
               <div className="absolute bottom-6 left-6 right-6 text-white z-10">
                 <div className="bg-gradient-to-r from-black/80 to-black/60 p-5 rounded-xl backdrop-blur-md border border-white/10">
-                  <h4 className="font-bold text-xl mb-1">{currentVideo.title}</h4>
-                  <p className="text-sm opacity-90 mb-3">{currentVideo.subtitle}</p>
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs bg-pink-500 px-3 py-1.5 rounded-full font-semibold">{currentVideo.category}</span>
-                    <span className="text-xs opacity-80 bg-white/10 px-3 py-1.5 rounded-full">{currentVideo.duration}</span>
+                  <h4 className="font-bold text-xl mb-1">{currentVideo.alt}</h4>
+                  <div className="flex items-center justify-between mt-3">
+                    <span className="text-xs bg-pink-500 px-3 py-1.5 rounded-full font-semibold">Video {currentVideoIndex + 1}</span>
                   </div>
                 </div>
               </div>
@@ -250,7 +219,7 @@ const Video = () => {
           {/* Content Text */}
           <div className="space-y-6">
             <div>
-              <p className="text-pink-500 tracking-widest text-sm font-medium mb-2">{currentVideo.category.toUpperCase()}</p>
+              <p className="text-pink-500 tracking-widest text-sm font-medium mb-2">VIDEO SHOWCASE</p>
               <h2 className="text-4xl lg:text-5xl font-playfair font-bold text-white mb-4">
                 {videoSectionData.contentTitle}
               </h2>
@@ -262,7 +231,7 @@ const Video = () => {
             
             {/* Current Model Stats */}
             <div className="bg-gray-900 bg-opacity-50 p-6 rounded-lg space-y-4">
-              <h3 className="text-white font-semibold text-lg mb-4">Currently Featuring: {currentVideo.title}</h3>
+              <h3 className="text-white font-semibold text-lg mb-4">Currently Featuring: {currentVideo.alt}</h3>
               
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div className="text-center">
@@ -339,7 +308,7 @@ const Video = () => {
                     autoPlay
                     playsInline
                   >
-                    <source src={video.backgroundVideo} type="video/mp4" />
+                    <source src={video.src} type="video/mp4" />
                   </video>
                   <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                     <Play className="text-white w-12 h-12" fill="white" />
@@ -362,13 +331,11 @@ const Video = () => {
                   )}
                   
                   <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-black/70 to-transparent p-4">
-                    <h4 className="font-semibold text-white text-sm mb-1">{video.title}</h4>
-                    <p className="text-gray-300 text-xs mb-2">{video.subtitle}</p>
-                    <div className="flex justify-between items-center">
+                    <h4 className="font-semibold text-white text-sm mb-1 truncate">{video.alt}</h4>
+                    <div className="flex justify-between items-center mt-2">
                       <span className="text-pink-400 text-xs bg-pink-500/20 px-2 py-1 rounded-full">
-                        {video.category}
+                        Video {index + 1}
                       </span>
-                      <span className="text-gray-400 text-xs">{video.duration}</span>
                     </div>
                   </div>
                 </div>
