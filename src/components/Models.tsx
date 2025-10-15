@@ -1,35 +1,39 @@
 import { useState } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react";
 
 const Models = () => {
   const base = import.meta.env.BASE_URL;
   
-  // All gallery images - you can add more here
-  const allGalleryImages = [
-    { src: `${base}model1.jpeg`, alt: "Fashion Editorial 1", category: "Fashion" },
-    { src: `${base}model2.jpeg`, alt: "Beauty Campaign", category: "Beauty" },
-    { src: `${base}model3.jpeg`, alt: "Fashion Editorial 2", category: "Fashion" },
-    { src: `${base}model4.jpeg`, alt: "Bridal Collection", category: "Bridal" },
-    { src: `${base}model1.jpeg`, alt: "Fashion Week", category: "Fashion" },
-    { src: `${base}model2.jpeg`, alt: "Content Creation", category: "Content" },
-    { src: `${base}model3.jpeg`, alt: "Runway Show", category: "Fashion" },
-    { src: `${base}model4.jpeg`, alt: "Beauty Portrait", category: "Beauty" },
-    { src: `${base}model1.jpeg`, alt: "Editorial Shoot", category: "Fashion" },
-    { src: `${base}model2.jpeg`, alt: "Lifestyle Content", category: "Content" },
-    { src: `${base}model3.jpeg`, alt: "Bridal Fashion", category: "Bridal" },
-    { src: `${base}model4.jpeg`, alt: "Campaign Work", category: "Fashion" },
-  ];
+  // Generate gallery images - simulating 1000+ images
+  // Replace this with your actual image data/API
+  const generateGalleryImages = () => {
+    const images = [];
+    const categories = ["Fashion", "Beauty", "Bridal", "Content", "Lifestyle"];
+    const actualImages = ["model1.jpeg", "model2.jpeg", "model3.jpeg", "model4.jpeg"];
+    
+    // Generate placeholder data for 1000+ images
+    // In production, you would fetch this from your backend/API
+    for (let i = 1; i <= 1200; i++) {
+      const imageFile = actualImages[(i - 1) % actualImages.length];
+      const category = categories[(i - 1) % categories.length];
+      images.push({
+        src: `${base}${imageFile}`,
+        alt: `Portfolio Image ${i}`,
+        category: category,
+        id: i
+      });
+    }
+    return images;
+  };
 
-  const IMAGES_PER_PAGE = 6;
+  const allGalleryImages = generateGalleryImages();
+
+  const IMAGES_PER_PAGE = 12;
   const [currentPage, setCurrentPage] = useState(1);
-  const [showAll, setShowAll] = useState(false);
 
   const totalPages = Math.ceil(allGalleryImages.length / IMAGES_PER_PAGE);
   
   const getCurrentImages = () => {
-    if (showAll) {
-      return allGalleryImages;
-    }
     const startIndex = (currentPage - 1) * IMAGES_PER_PAGE;
     const endIndex = startIndex + IMAGES_PER_PAGE;
     return allGalleryImages.slice(startIndex, endIndex);
@@ -49,11 +53,72 @@ const Models = () => {
     }
   };
 
+  const handleFirstPage = () => {
+    setCurrentPage(1);
+    scrollToGallery();
+  };
+
+  const handleLastPage = () => {
+    setCurrentPage(totalPages);
+    scrollToGallery();
+  };
+
   const scrollToGallery = () => {
     const element = document.getElementById("models");
     if (element) {
       element.scrollIntoView({ behavior: "smooth", block: "start" });
     }
+  };
+
+  // Generate page numbers to display (smart pagination for large datasets)
+  const getPageNumbers = () => {
+    const pages = [];
+    const maxPagesToShow = 5;
+    
+    if (totalPages <= maxPagesToShow + 2) {
+      // Show all pages if total is small
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push(i);
+      }
+    } else {
+      // Always show first page
+      pages.push(1);
+      
+      let startPage = Math.max(2, currentPage - 1);
+      let endPage = Math.min(totalPages - 1, currentPage + 1);
+      
+      // Adjust if we're near the beginning
+      if (currentPage <= 3) {
+        startPage = 2;
+        endPage = maxPagesToShow;
+      }
+      
+      // Adjust if we're near the end
+      if (currentPage >= totalPages - 2) {
+        startPage = totalPages - maxPagesToShow + 1;
+        endPage = totalPages - 1;
+      }
+      
+      // Add ellipsis after first page if needed
+      if (startPage > 2) {
+        pages.push('...');
+      }
+      
+      // Add middle pages
+      for (let i = startPage; i <= endPage; i++) {
+        pages.push(i);
+      }
+      
+      // Add ellipsis before last page if needed
+      if (endPage < totalPages - 1) {
+        pages.push('...');
+      }
+      
+      // Always show last page
+      pages.push(totalPages);
+    }
+    
+    return pages;
   };
 
   return (
@@ -66,9 +131,12 @@ const Models = () => {
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
             A curated selection of my work spanning fashion, beauty, bridal, and lifestyle campaigns.
           </p>
+          <p className="text-sm text-muted-foreground mt-2">
+            Showing {(currentPage - 1) * IMAGES_PER_PAGE + 1} - {Math.min(currentPage * IMAGES_PER_PAGE, allGalleryImages.length)} of {allGalleryImages.length} images
+          </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
           {getCurrentImages().map((image, index) => (
             <div
               key={index}
@@ -92,63 +160,103 @@ const Models = () => {
           ))}
         </div>
 
-        {/* Pagination Controls */}
-        {!showAll && totalPages > 1 && (
-          <div className="flex items-center justify-center gap-4 mt-12">
-            <button
-              onClick={handlePrevPage}
-              disabled={currentPage === 1}
-              className="p-2 rounded-full bg-secondary hover:bg-primary transition-all disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-secondary"
-              aria-label="Previous page"
-            >
-              <ChevronLeft className="w-6 h-6" />
-            </button>
-            
-            <div className="flex items-center gap-2">
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                <button
-                  key={page}
-                  onClick={() => {
-                    setCurrentPage(page);
-                    scrollToGallery();
-                  }}
-                  className={`w-10 h-10 rounded-full transition-all ${
-                    currentPage === page
-                      ? "bg-pink-500 text-white"
-                      : "bg-secondary hover:bg-primary/50"
-                  }`}
-                >
-                  {page}
-                </button>
-              ))}
+        {/* Advanced Pagination Controls */}
+        {totalPages > 1 && (
+          <div className="mt-12 space-y-4">
+            {/* Main Pagination */}
+            <div className="flex flex-wrap items-center justify-center gap-2">
+              {/* First Page */}
+              <button
+                onClick={handleFirstPage}
+                disabled={currentPage === 1}
+                className="p-2 rounded-full bg-secondary hover:bg-primary transition-all disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-secondary"
+                aria-label="First page"
+                title="First page"
+              >
+                <ChevronsLeft className="w-5 h-5" />
+              </button>
+
+              {/* Previous Page */}
+              <button
+                onClick={handlePrevPage}
+                disabled={currentPage === 1}
+                className="p-2 rounded-full bg-secondary hover:bg-primary transition-all disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-secondary"
+                aria-label="Previous page"
+                title="Previous page"
+              >
+                <ChevronLeft className="w-5 h-5" />
+              </button>
+              
+              {/* Page Numbers */}
+              <div className="flex items-center gap-2">
+                {getPageNumbers().map((page, index) => (
+                  page === '...' ? (
+                    <span key={`ellipsis-${index}`} className="px-2 text-muted-foreground">
+                      ...
+                    </span>
+                  ) : (
+                    <button
+                      key={page}
+                      onClick={() => {
+                        setCurrentPage(page as number);
+                        scrollToGallery();
+                      }}
+                      className={`min-w-[40px] h-10 px-3 rounded-full transition-all font-medium ${
+                        currentPage === page
+                          ? "bg-pink-500 text-white scale-110"
+                          : "bg-secondary hover:bg-primary/50 text-foreground"
+                      }`}
+                    >
+                      {page}
+                    </button>
+                  )
+                ))}
+              </div>
+
+              {/* Next Page */}
+              <button
+                onClick={handleNextPage}
+                disabled={currentPage === totalPages}
+                className="p-2 rounded-full bg-secondary hover:bg-primary transition-all disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-secondary"
+                aria-label="Next page"
+                title="Next page"
+              >
+                <ChevronRight className="w-5 h-5" />
+              </button>
+
+              {/* Last Page */}
+              <button
+                onClick={handleLastPage}
+                disabled={currentPage === totalPages}
+                className="p-2 rounded-full bg-secondary hover:bg-primary transition-all disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-secondary"
+                aria-label="Last page"
+                title="Last page"
+              >
+                <ChevronsRight className="w-5 h-5" />
+              </button>
             </div>
 
-            <button
-              onClick={handleNextPage}
-              disabled={currentPage === totalPages}
-              className="p-2 rounded-full bg-secondary hover:bg-primary transition-all disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-secondary"
-              aria-label="Next page"
-            >
-              <ChevronRight className="w-6 h-6" />
-            </button>
+            {/* Quick Jump Input */}
+            <div className="flex items-center justify-center gap-3 text-sm">
+              <span className="text-muted-foreground">Go to page:</span>
+              <input
+                type="number"
+                min="1"
+                max={totalPages}
+                value={currentPage}
+                onChange={(e) => {
+                  const page = parseInt(e.target.value);
+                  if (page >= 1 && page <= totalPages) {
+                    setCurrentPage(page);
+                    scrollToGallery();
+                  }
+                }}
+                className="w-20 px-3 py-1 bg-secondary border border-border rounded-md text-center focus:outline-none focus:ring-2 focus:ring-pink-500"
+              />
+              <span className="text-muted-foreground">of {totalPages}</span>
+            </div>
           </div>
         )}
-
-        {/* View More / View Less Button */}
-        <div className="flex justify-center mt-8">
-          <button
-            onClick={() => {
-              setShowAll(!showAll);
-              if (showAll) {
-                setCurrentPage(1);
-                scrollToGallery();
-              }
-            }}
-            className="px-8 py-3 bg-pink-500 hover:bg-pink-600 text-white font-semibold rounded-full transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl"
-          >
-            {showAll ? "View Less" : "View More"}
-          </button>
-        </div>
       </div>
     </section>
   );
