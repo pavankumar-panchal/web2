@@ -52,11 +52,11 @@ const Header = () => {
               <div className="absolute bottom-20 left-20 w-64 h-64 bg-purple-500 rounded-full blur-[120px] opacity-10 animate-pulse" style={{ animationDelay: '1s' }}></div>
               
               <div className="relative z-10 flex flex-col justify-center items-center h-full space-y-6 px-8">
-                <div className="space-y-6 w-full max-w-md">
-                  {['HOME', 'ABOUT', 'MODELS', 'VIDEO', 'SERVICES', 'CONTACT'].map((item, index) => (
+                <div className="space-y-8 w-full max-w-md">
+                  {['Modelling', 'UGC & Content', 'About Me', 'Contact'].map((item, index) => (
                     <button
                       key={item}
-                      onClick={() => scrollToSection(item.toLowerCase())}
+                      onClick={() => scrollToSection(item === 'Modelling' || item === 'UGC & Content Creation' ? 'services' : item === 'About Me' ? 'about' : 'contact')}
                       className="group relative block w-full text-left text-white text-3xl md:text-4xl font-light tracking-widest transition-all duration-500 hover:translate-x-4 overflow-hidden"
                       style={{ 
                         animationDelay: `${index * 0.1}s`,
@@ -81,20 +81,6 @@ const Header = () => {
                       <span className="absolute bottom-0 left-12 right-0 h-[2px] bg-gradient-to-r from-pink-500 to-transparent transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"></span>
                     </button>
                   ))}
-                </div>
-                
-                {/* Contact Info */}
-                <div className="absolute bottom-12 left-8 right-8 text-white opacity-60 space-y-2" style={{
-                  animation: 'fadeIn 1s ease-out 0.8s forwards',
-                  opacity: 0
-                }}>
-                  <div className="h-[1px] w-16 bg-pink-500 mb-4"></div>
-                  <p className="text-xs tracking-widest">FOLLOW US</p>
-                  <div className="flex space-x-4 text-sm">
-                    <span className="hover:text-pink-500 cursor-pointer transition-colors duration-300">INSTAGRAM</span>
-                    <span className="hover:text-pink-500 cursor-pointer transition-colors duration-300">FACEBOOK</span>
-                    <span className="hover:text-pink-500 cursor-pointer transition-colors duration-300">TWITTER</span>
-                  </div>
                 </div>
               </div>
               
