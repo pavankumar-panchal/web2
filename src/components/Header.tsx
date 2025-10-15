@@ -17,8 +17,8 @@ const Header = () => {
       <nav className="flex justify-between items-center p-6 md:p-8 mx-4 md:mx-8 relative z-10">
         {/* Logo */}
         <div className="text-white">
-          <h1 className="text-xl md:text-2xl font-bold tracking-widest">STYLISTIC</h1>
-          <p className="text-xs tracking-wider opacity-80">MODEL AGENCY</p>
+          <h1 className="text-xl md:text-2xl font-bold tracking-widest">RIINA SEISE</h1>
+          <p className="text-xs tracking-wider opacity-80">MODEL & CONTENT CREATOR</p>
         </div>
         
         {/* Hamburger Menu */}

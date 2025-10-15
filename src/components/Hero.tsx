@@ -62,7 +62,7 @@ const Hero = () => {
           </p>
           
           {/* Main Title with Outline Text */}
-          <h1 className="text-6xl md:text-8xl lg:text-9xl font-bold mb-6 leading-none animate-fade-in text-center" 
+          <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold mb-6 leading-none animate-fade-in text-center" 
               style={{
                 color: 'transparent',
                 WebkitTextStroke: '2px white',
@@ -71,7 +71,7 @@ const Hero = () => {
                 fontWeight: 900,
                 animationDelay: '0.3s'                                                                                                                                                    
               }}>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
-            STYLISTIC
+            RIINA SEISE
           </h1>
           
           {/* Bio Text */}

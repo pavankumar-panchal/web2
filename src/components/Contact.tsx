@@ -107,8 +107,8 @@ const Contact = () => {
               </svg>
               <h3 className="text-xl font-bold mb-2">Follow on Instagram</h3>
               <p className="text-muted-foreground">
-                <a href="https://instagram.com/stylisticmodel" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">
-                  @stylisticmodel
+                <a href="https://www.instagram.com/riinaseise?igsh=MTg1aHZndDBoYm9nMQ%3D%3D" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">
+                  @riinaseise
                 </a>
               </p>
             </div>
