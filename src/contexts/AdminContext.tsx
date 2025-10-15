@@ -18,10 +18,20 @@ interface NavbarData {
   subtitle: string;
 }
 
+interface VideoSectionData {
+  mainTitle: string;
+  mainDescription: string;
+  contentTitle: string;
+  contentDescription: string;
+  galleryTitle: string;
+  galleryDescription: string;
+}
+
 interface AdminContextType {
   galleryImages: GalleryImage[];
   videos: Video[];
   navbarData: NavbarData;
+  videoSectionData: VideoSectionData;
   addGalleryImage: (image: Omit<GalleryImage, 'id'>) => void;
   updateGalleryImage: (id: number, image: Partial<GalleryImage>) => void;
   deleteGalleryImage: (id: number) => void;
@@ -29,6 +39,7 @@ interface AdminContextType {
   updateVideo: (id: number, video: Partial<Video>) => void;
   deleteVideo: (id: number) => void;
   updateNavbar: (data: Partial<NavbarData>) => void;
+  updateVideoSection: (data: Partial<VideoSectionData>) => void;
 }
 
 const AdminContext = createContext<AdminContextType | undefined>(undefined);
@@ -37,6 +48,7 @@ const STORAGE_KEYS = {
   GALLERY: 'riina_gallery_images',
   VIDEOS: 'riina_videos',
   NAVBAR: 'riina_navbar_data',
+  VIDEO_SECTION: 'riina_video_section_data',
 };
 
 export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -73,6 +85,15 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     subtitle: "MODEL & CONTENT CREATOR",
   });
 
+  const getDefaultVideoSection = (): VideoSectionData => ({
+    mainTitle: "My Work",
+    mainDescription: "Explore my portfolio of professional modeling and content creation",
+    contentTitle: "My Creative Portfolio",
+    contentDescription: "Explore my diverse portfolio showcasing professional modeling and content creation. Each video highlights different aspects of my work, from runway and editorial shoots to commercial campaigns, demonstrating versatility and creativity across the fashion and lifestyle industries.",
+    galleryTitle: "My Video Collection",
+    galleryDescription: "Browse through my diverse portfolio of work. Click on any video to view it.",
+  });
+
   // Load data from localStorage or use defaults
   const [galleryImages, setGalleryImages] = useState<GalleryImage[]>(() => {
     const stored = localStorage.getItem(STORAGE_KEYS.GALLERY);
@@ -89,6 +110,11 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     return stored ? JSON.parse(stored) : getDefaultNavbar();
   });
 
+  const [videoSectionData, setVideoSectionData] = useState<VideoSectionData>(() => {
+    const stored = localStorage.getItem(STORAGE_KEYS.VIDEO_SECTION);
+    return stored ? JSON.parse(stored) : getDefaultVideoSection();
+  });
+
   // Save to localStorage whenever data changes
   useEffect(() => {
     localStorage.setItem(STORAGE_KEYS.GALLERY, JSON.stringify(galleryImages));
@@ -101,6 +127,10 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   useEffect(() => {
     localStorage.setItem(STORAGE_KEYS.NAVBAR, JSON.stringify(navbarData));
   }, [navbarData]);
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEYS.VIDEO_SECTION, JSON.stringify(videoSectionData));
+  }, [videoSectionData]);
 
   // Gallery operations
   const addGalleryImage = (image: Omit<GalleryImage, 'id'>) => {
@@ -139,12 +169,18 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     setNavbarData({ ...navbarData, ...data });
   };
 
+  // Video section operations
+  const updateVideoSection = (data: Partial<VideoSectionData>) => {
+    setVideoSectionData({ ...videoSectionData, ...data });
+  };
+
   return (
     <AdminContext.Provider
       value={{
         galleryImages,
         videos,
         navbarData,
+        videoSectionData,
         addGalleryImage,
         updateGalleryImage,
         deleteGalleryImage,
@@ -152,6 +188,7 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         updateVideo,
         deleteVideo,
         updateNavbar,
+        updateVideoSection,
       }}
     >
       {children}

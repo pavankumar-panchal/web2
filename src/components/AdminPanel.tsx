@@ -12,6 +12,7 @@ const AdminPanel = ({ isOpen, onClose }: AdminPanelProps) => {
     galleryImages,
     videos,
     navbarData,
+    videoSectionData,
     addGalleryImage,
     updateGalleryImage,
     deleteGalleryImage,
@@ -19,9 +20,10 @@ const AdminPanel = ({ isOpen, onClose }: AdminPanelProps) => {
     updateVideo,
     deleteVideo,
     updateNavbar,
+    updateVideoSection,
   } = useAdmin();
 
-  const [activeTab, setActiveTab] = useState<'gallery' | 'videos' | 'navbar'>('gallery');
+  const [activeTab, setActiveTab] = useState<'gallery' | 'videos' | 'navbar' | 'videoSection'>('gallery');
   const [editingId, setEditingId] = useState<number | null>(null);
   const [formData, setFormData] = useState<any>({});
   const [imagePreview, setImagePreview] = useState<string>('');
@@ -104,6 +106,12 @@ const AdminPanel = ({ isOpen, onClose }: AdminPanelProps) => {
     setFormData({});
   };
 
+  const handleSubmitVideoSection = (e: React.FormEvent) => {
+    e.preventDefault();
+    updateVideoSection(formData);
+    setFormData({});
+  };
+
   const handleEdit = (item: any, type: string) => {
     setEditingId(item.id);
     setFormData(item);
@@ -162,6 +170,17 @@ const AdminPanel = ({ isOpen, onClose }: AdminPanelProps) => {
           >
             <Navigation className="w-4 h-4" />
             Navbar
+          </button>
+          <button
+            onClick={() => setActiveTab('videoSection')}
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${
+              activeTab === 'videoSection'
+                ? 'bg-pink-500 text-white'
+                : 'bg-secondary hover:bg-secondary/70'
+            }`}
+          >
+            <VideoIcon className="w-4 h-4" />
+            Video Section
           </button>
         </div>
 
@@ -508,6 +527,123 @@ const AdminPanel = ({ isOpen, onClose }: AdminPanelProps) => {
                 <div className="bg-background p-6 rounded-lg border border-border">
                   <h1 className="text-2xl font-bold tracking-widest">{navbarData.title}</h1>
                   <p className="text-sm tracking-wider opacity-80">{navbarData.subtitle}</p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Video Section Tab */}
+          {activeTab === 'videoSection' && (
+            <div className="space-y-6">
+              <div className="bg-secondary/30 p-6 rounded-lg">
+                <h3 className="text-xl font-bold mb-4">Edit Video Section Content</h3>
+                <form onSubmit={handleSubmitVideoSection} className="space-y-6">
+                  {/* Main Section */}
+                  <div className="space-y-4 p-4 bg-background/50 rounded-lg border border-border">
+                    <h4 className="text-lg font-semibold text-pink-500">Main Section</h4>
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Main Title</label>
+                      <input
+                        type="text"
+                        value={formData.mainTitle !== undefined ? formData.mainTitle : videoSectionData.mainTitle}
+                        onChange={(e) => setFormData({ ...formData, mainTitle: e.target.value })}
+                        className="w-full px-4 py-2 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500"
+                        placeholder="My Work"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Main Description</label>
+                      <textarea
+                        value={formData.mainDescription !== undefined ? formData.mainDescription : videoSectionData.mainDescription}
+                        onChange={(e) => setFormData({ ...formData, mainDescription: e.target.value })}
+                        className="w-full px-4 py-2 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 min-h-[80px]"
+                        placeholder="Explore my portfolio of creative work..."
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  {/* Content Section */}
+                  <div className="space-y-4 p-4 bg-background/50 rounded-lg border border-border">
+                    <h4 className="text-lg font-semibold text-pink-500">Content Section</h4>
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Content Title</label>
+                      <input
+                        type="text"
+                        value={formData.contentTitle !== undefined ? formData.contentTitle : videoSectionData.contentTitle}
+                        onChange={(e) => setFormData({ ...formData, contentTitle: e.target.value })}
+                        className="w-full px-4 py-2 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500"
+                        placeholder="My Creative Portfolio"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Content Description</label>
+                      <textarea
+                        value={formData.contentDescription !== undefined ? formData.contentDescription : videoSectionData.contentDescription}
+                        onChange={(e) => setFormData({ ...formData, contentDescription: e.target.value })}
+                        className="w-full px-4 py-2 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 min-h-[80px]"
+                        placeholder="Explore my diverse portfolio..."
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  {/* Gallery Section */}
+                  <div className="space-y-4 p-4 bg-background/50 rounded-lg border border-border">
+                    <h4 className="text-lg font-semibold text-pink-500">Gallery Section</h4>
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Gallery Title</label>
+                      <input
+                        type="text"
+                        value={formData.galleryTitle !== undefined ? formData.galleryTitle : videoSectionData.galleryTitle}
+                        onChange={(e) => setFormData({ ...formData, galleryTitle: e.target.value })}
+                        className="w-full px-4 py-2 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500"
+                        placeholder="My Video Collection"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Gallery Description</label>
+                      <textarea
+                        value={formData.galleryDescription !== undefined ? formData.galleryDescription : videoSectionData.galleryDescription}
+                        onChange={(e) => setFormData({ ...formData, galleryDescription: e.target.value })}
+                        className="w-full px-4 py-2 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 min-h-[80px]"
+                        placeholder="Browse through my video collection..."
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <button
+                    type="submit"
+                    className="flex items-center gap-2 px-6 py-2 bg-pink-500 hover:bg-pink-600 text-white rounded-lg transition-colors"
+                  >
+                    <Save className="w-4 h-4" />
+                    Update Video Section
+                  </button>
+                </form>
+              </div>
+
+              <div className="bg-secondary/30 p-6 rounded-lg">
+                <h3 className="text-xl font-bold mb-4">Current Video Section Preview</h3>
+                <div className="space-y-4">
+                  <div className="bg-background p-4 rounded-lg border border-border">
+                    <p className="text-xs text-pink-500 font-semibold mb-2">MAIN SECTION</p>
+                    <h2 className="text-xl font-bold mb-2">{videoSectionData.mainTitle}</h2>
+                    <p className="text-sm text-muted-foreground">{videoSectionData.mainDescription}</p>
+                  </div>
+                  <div className="bg-background p-4 rounded-lg border border-border">
+                    <p className="text-xs text-pink-500 font-semibold mb-2">CONTENT SECTION</p>
+                    <h2 className="text-xl font-bold mb-2">{videoSectionData.contentTitle}</h2>
+                    <p className="text-sm text-muted-foreground">{videoSectionData.contentDescription}</p>
+                  </div>
+                  <div className="bg-background p-4 rounded-lg border border-border">
+                    <p className="text-xs text-pink-500 font-semibold mb-2">GALLERY SECTION</p>
+                    <h2 className="text-xl font-bold mb-2">{videoSectionData.galleryTitle}</h2>
+                    <p className="text-sm text-muted-foreground">{videoSectionData.galleryDescription}</p>
+                  </div>
                 </div>
               </div>
             </div>

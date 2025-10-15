@@ -1,7 +1,9 @@
 import { Play, Pause, ChevronLeft, ChevronRight } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
+import { useAdmin } from "../contexts/AdminContext";
 
 const Video = () => {
+  const { videoSectionData } = useAdmin();
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -129,10 +131,10 @@ const Video = () => {
         <div className="text-center mb-16 animate-fade-in">
           <p className="text-pink-500 tracking-widest text-sm font-medium mb-3">VIDEO SHOWCASE</p>
           <h2 className="text-5xl lg:text-6xl font-bold text-white mb-4" style={{ fontFamily: 'Playfair Display, serif' }}>
-            My <span className="text-transparent" style={{ WebkitTextStroke: '2px #ec4899' }}>Work</span>
+            {videoSectionData.mainTitle}
           </h2>
           <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-            Explore my portfolio of professional modeling and content creation
+            {videoSectionData.mainDescription}
           </p>
         </div>
 
@@ -250,15 +252,12 @@ const Video = () => {
             <div>
               <p className="text-pink-500 tracking-widest text-sm font-medium mb-2">{currentVideo.category.toUpperCase()}</p>
               <h2 className="text-4xl lg:text-5xl font-playfair font-bold text-white mb-4">
-                My Creative<br />
-                <span className="text-pink-500">Portfolio</span>
+                {videoSectionData.contentTitle}
               </h2>
             </div>
             
             <p className="text-gray-300 text-lg leading-relaxed">
-              Explore my diverse portfolio showcasing professional modeling and content creation. 
-              Each video highlights different aspects of my work, from runway and editorial shoots to commercial campaigns, 
-              demonstrating versatility and creativity across the fashion and lifestyle industries.
+              {videoSectionData.contentDescription}
             </p>
             
             {/* Current Model Stats */}
@@ -316,10 +315,10 @@ const Video = () => {
           <div className="text-center mb-12">
             <p className="text-pink-500 tracking-widest text-sm font-medium mb-2">VIDEO GALLERY</p>
             <h3 className="text-3xl lg:text-4xl font-playfair font-bold text-white">
-              My <span className="text-pink-500">Video Collection</span>
+              {videoSectionData.galleryTitle}
             </h3>
             <p className="text-gray-400 mt-4 max-w-2xl mx-auto">
-              Browse through my diverse portfolio of work. Click on any video to view it.
+              {videoSectionData.galleryDescription}
             </p>
           </div>
           
