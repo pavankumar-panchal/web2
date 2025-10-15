@@ -5,15 +5,16 @@ const About = () => {
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div className="space-y-6 animate-fade-in">
             <h2 className="text-4xl md:text-5xl font-bold">
-              Elevating Fashion,
-              <br />
-              One Model at a Time
+              About Me
             </h2>
             <p className="text-muted-foreground text-lg leading-relaxed">
-              STYLISTIC is a premier model agency dedicated to discovering and nurturing exceptional talent. We represent the world's most sought-after models, connecting them with leading fashion brands, designers, and creative visionaries.
+              Welcome to STYLISTIC - where passion meets professionalism. I'm a versatile model and content creator with expertise spanning fashion, beauty, and bridal modeling. My journey in the modeling industry has taken me through prestigious fashion weeks and film festivals, allowing me to work with renowned brands and creative teams worldwide.
             </p>
             <p className="text-muted-foreground text-lg leading-relaxed">
-              With years of industry expertise, we've established ourselves as a trusted partner in the fashion world, known for our commitment to excellence and our ability to launch successful modeling careers.
+              Beyond traditional modeling, I specialize in UGC (User Generated Content) and content creation, producing authentic and engaging visual stories that resonate with diverse audiences. Whether it's high-fashion editorials, beauty campaigns, or collaborative brand content, I bring dedication, creativity, and professionalism to every project.
+            </p>
+            <p className="text-muted-foreground text-lg leading-relaxed">
+              My commitment to excellence and my ability to adapt to various creative visions have established me as a trusted collaborator in the fashion and content creation space. I believe in creating meaningful connections through visual storytelling and bringing brands' visions to life with authenticity and style.
             </p>
           </div>
 

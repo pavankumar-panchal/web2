@@ -49,8 +49,8 @@ const Hero = () => {
             <source src={video} type="video/mp4" />
           </video>
         ))}
-        {/* Dark overlay for better text readability */}
-        <div className="absolute inset-0 bg-black bg-opacity-60"></div>
+        {/* Light overlay for better text readability while keeping video clear */}
+        <div className="absolute inset-0 bg-black bg-opacity-30"></div>
       </div>
 
       {/* Main Content */}
@@ -95,21 +95,6 @@ const Hero = () => {
             Become A Model                                                                                                          
           </button>
         </div>
-      </div>
-
-      {/* Video Progress Indicators */}
-      <div className="absolute top-20 right-[300px] flex flex-col space-y-2 z-20">
-        {backgroundVideos.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => setCurrentVideoIndex(index)}
-            className={`w-2 h-8 rounded-full transition-all duration-300 ${
-              index === currentVideoIndex 
-                ? 'bg-pink-500' 
-                : 'bg-white bg-opacity-50 hover:bg-opacity-80'
-            }`}
-          />
-        ))}
       </div>
 
       {/* Model Grid at Bottom - Better positioned and aligned */}

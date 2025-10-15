@@ -1,26 +1,18 @@
-import { Sparkles, Camera, TrendingUp, Users } from "lucide-react";
+import { Camera, Video } from "lucide-react";
 
 const Services = () => {
   const services = [
     {
       icon: Camera,
-      title: "Editorial & Runway",
-      description: "Top-tier models for fashion shows, magazine editorials, and high-fashion campaigns.",
+      title: "Modelling",
+      description: "Fashion, Beauty, Bridal, Fashion Weeks, and Film Festivals - Professional modeling for all occasions.",
+      items: ["Fashion", "Beauty", "Bridal", "Fashion Weeks", "Film Festivals"]
     },
     {
-      icon: Sparkles,
-      title: "Commercial Modeling",
-      description: "Versatile talent for advertising, e-commerce, and brand campaigns.",
-    },
-    {
-      icon: TrendingUp,
-      title: "Career Development",
-      description: "Comprehensive training, portfolio development, and career management services.",
-    },
-    {
-      icon: Users,
-      title: "Talent Booking",
-      description: "Seamless booking process connecting brands with the perfect model match.",
+      icon: Video,
+      title: "UGC & Content Creation",
+      description: "All collaboration videos & photos - Creating engaging content that resonates with your audience.",
+      items: ["Collaboration Videos", "Social Media Content", "Brand Photography"]
     },
   ];
 
@@ -36,7 +28,7 @@ const Services = () => {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
           {services.map((service, index) => (
             <div
               key={index}
@@ -44,10 +36,20 @@ const Services = () => {
               style={{ animationDelay: `${index * 100}ms` }}
             >
               <service.icon className="w-12 h-12 text-primary mb-4 group-hover:scale-110 transition-transform" />
-              <h3 className="text-xl font-bold mb-3">{service.title}</h3>
-              <p className="text-muted-foreground text-sm leading-relaxed">
+              <h3 className="text-2xl font-bold mb-3">{service.title}</h3>
+              <p className="text-muted-foreground text-sm leading-relaxed mb-4">
                 {service.description}
               </p>
+              {service.items && (
+                <ul className="space-y-2">
+                  {service.items.map((item, idx) => (
+                    <li key={idx} className="text-sm text-muted-foreground flex items-center">
+                      <span className="w-1.5 h-1.5 rounded-full bg-primary mr-2"></span>
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
           ))}
         </div>
