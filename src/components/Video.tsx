@@ -7,57 +7,57 @@ const Video = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const backgroundVideoRef = useRef<HTMLVideoElement>(null);
 
-  // Array of 5 example videos with different themes using your local videos
+  // Array of 5 portfolio videos
   const videos = [
     {
       id: 1,
-      title: "SOPHIA MARTINEZ",
-      subtitle: "Professional Fashion Model",
+      title: "FASHION EDITORIAL",
+      subtitle: "High Fashion Campaign",
       duration: "2:30 mins",
       poster: "/poster.jpeg",
       videoUrl: "/video1.mp4",
       backgroundVideo: "/video1.mp4",
-      category: "Featured Model"
+      category: "Fashion"
     },
     {
       id: 2,
-      title: "ELENA RODRIGUEZ",
-      subtitle: "Runway Specialist",
+      title: "RUNWAY COLLECTION",
+      subtitle: "Fashion Week Highlights",
       duration: "3:15 mins",
       poster: "/poster.jpeg",
       videoUrl: "/video2.mp4",
       backgroundVideo: "/video2.mp4",
-      category: "Runway Star"
+      category: "Runway"
     },
     {
       id: 3,
-      title: "MAYA CHEN",
-      subtitle: "Commercial Model",
+      title: "COMMERCIAL CAMPAIGN",
+      subtitle: "Brand Collaboration",
       duration: "1:45 mins",
       poster: "/poster.jpeg",
       videoUrl: "/video3.mp4",
       backgroundVideo: "/video3.mp4",
-      category: "Commercial Star"
+      category: "Commercial"
     },
     {
       id: 4,
-      title: "ISABELLA JOHNSON",
-      subtitle: "Editorial Model",
+      title: "EDITORIAL SHOOT",
+      subtitle: "Magazine Feature",
       duration: "4:20 mins",
       poster: "/poster.jpeg",
       videoUrl: "/video4.mp4",
       backgroundVideo: "/video4.mp4",
-      category: "Editorial Queen"
+      category: "Editorial"
     },
     {
       id: 5,
-      title: "ARIA THOMPSON",
-      subtitle: "Luxury Brand Ambassador",
+      title: "LIFESTYLE CONTENT",
+      subtitle: "UGC & Brand Collaboration",
       duration: "2:55 mins",
       poster: "/poster.jpeg",
       videoUrl: "/video1.mp4",
       backgroundVideo: "/video1.mp4",
-      category: "Brand Ambassador"
+      category: "Lifestyle"
     }
   ];
 
@@ -129,10 +129,10 @@ const Video = () => {
         <div className="text-center mb-16 animate-fade-in">
           <p className="text-pink-500 tracking-widest text-sm font-medium mb-3">VIDEO SHOWCASE</p>
           <h2 className="text-5xl lg:text-6xl font-bold text-white mb-4" style={{ fontFamily: 'Playfair Display, serif' }}>
-            Meet Our <span className="text-transparent" style={{ WebkitTextStroke: '2px #ec4899' }}>Stars</span>
+            My <span className="text-transparent" style={{ WebkitTextStroke: '2px #ec4899' }}>Work</span>
           </h2>
           <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-            Experience our exclusive collection of professional models in action
+            Explore my portfolio of professional modeling and content creation
           </p>
         </div>
 
@@ -250,15 +250,15 @@ const Video = () => {
             <div>
               <p className="text-pink-500 tracking-widest text-sm font-medium mb-2">{currentVideo.category.toUpperCase()}</p>
               <h2 className="text-4xl lg:text-5xl font-playfair font-bold text-white mb-4">
-                Meet Our<br />
-                <span className="text-pink-500">Star Models</span>
+                My Creative<br />
+                <span className="text-pink-500">Portfolio</span>
               </h2>
             </div>
             
             <p className="text-gray-300 text-lg leading-relaxed">
-              Experience our exclusive collection of professional models in action. 
-              Each video showcases different talents, from runway specialists to commercial stars, 
-              demonstrating their unique skills and versatility in the fashion industry.
+              Explore my diverse portfolio showcasing professional modeling and content creation. 
+              Each video highlights different aspects of my work, from runway and editorial shoots to commercial campaigns, 
+              demonstrating versatility and creativity across the fashion and lifestyle industries.
             </p>
             
             {/* Current Model Stats */}
@@ -316,10 +316,10 @@ const Video = () => {
           <div className="text-center mb-12">
             <p className="text-pink-500 tracking-widest text-sm font-medium mb-2">VIDEO GALLERY</p>
             <h3 className="text-3xl lg:text-4xl font-playfair font-bold text-white">
-              Our <span className="text-pink-500">Model Collection</span>
+              My <span className="text-pink-500">Video Collection</span>
             </h3>
             <p className="text-gray-400 mt-4 max-w-2xl mx-auto">
-              Explore our diverse portfolio of professional models. Click on any video to see their work.
+              Browse through my diverse portfolio of work. Click on any video to view it.
             </p>
           </div>
           
