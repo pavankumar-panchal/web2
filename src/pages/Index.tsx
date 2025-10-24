@@ -8,26 +8,36 @@ import Services from "@/components/Services";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import AdminPanel from "@/components/AdminPanel";
+import AdminLogin from "@/components/AdminLogin";
 
 const Index = () => {
   const [isAdminOpen, setIsAdminOpen] = useState(false);
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Ctrl+Shift+A to open admin panel
+      // Ctrl+Shift+A to open login dialog
       if (e.ctrlKey && e.shiftKey && e.key === 'A') {
         e.preventDefault();
-        setIsAdminOpen(true);
+        setIsLoginOpen(true);
       }
-      // Escape to close admin panel
-      if (e.key === 'Escape' && isAdminOpen) {
-        setIsAdminOpen(false);
+      // Escape to close admin panel or login
+      if (e.key === 'Escape') {
+        if (isAdminOpen) setIsAdminOpen(false);
+        if (isLoginOpen) setIsLoginOpen(false);
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isAdminOpen]);
+  }, [isAdminOpen, isLoginOpen]);
+
+  // Listen for mobile tap event to open login
+  useEffect(() => {
+    const onOpenAdmin = () => setIsLoginOpen(true);
+    window.addEventListener('open-admin', onOpenAdmin as EventListener);
+    return () => window.removeEventListener('open-admin', onOpenAdmin as EventListener);
+  }, []);
 
   return (
     <div className="min-h-screen galaxy-bg">
@@ -41,6 +51,13 @@ const Index = () => {
         <div className="parallel-anim" style={{animationDelay:'600ms'}}><Contact /></div>
       </main>
       <Footer />
+      
+      {/* Admin Login */}
+      <AdminLogin 
+        isOpen={isLoginOpen} 
+        onClose={() => setIsLoginOpen(false)} 
+        onLogin={() => setIsAdminOpen(true)} 
+      />
       
       {/* Admin Panel */}
       <AdminPanel isOpen={isAdminOpen} onClose={() => setIsAdminOpen(false)} />

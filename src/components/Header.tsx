@@ -1,10 +1,64 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { useAdmin } from "../contexts/AdminContext";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { navbarData } = useAdmin();
+  // Tap counter for mobile: 5 taps on logo opens the admin panel
+  const tapCountRef = useRef(0);
+  const tapTimeoutRef = useRef<number | null>(null);
+
+  const handleLogoTap = () => {
+    tapCountRef.current += 1;
+
+    // reset timer (3s) after last tap
+    if (tapTimeoutRef.current) {
+      window.clearTimeout(tapTimeoutRef.current);
+    }
+    tapTimeoutRef.current = window.setTimeout(() => {
+      if (tapCountRef.current > 0 && tapCountRef.current < 5) {
+        // Visual feedback for incomplete sequence
+        const logo = document.querySelector('.logo-wrapper');
+        if (logo) logo.classList.add('shake');
+        setTimeout(() => {
+          if (logo) logo.classList.remove('shake');
+        }, 500);
+      }
+      tapCountRef.current = 0;
+      tapTimeoutRef.current = null;
+    }, 3000);
+
+    // If tapped 5 times, dispatch event to open login
+    if (tapCountRef.current >= 5) {
+      try {
+        window.dispatchEvent(new CustomEvent('open-admin'));
+      } catch (e) {
+        // Fallback for older browsers
+        const ev = document.createEvent('Event');
+        ev.initEvent('open-admin', true, true);
+        window.dispatchEvent(ev);
+      }
+      tapCountRef.current = 0;
+      if (tapTimeoutRef.current) {
+        window.clearTimeout(tapTimeoutRef.current);
+        tapTimeoutRef.current = null;
+      }
+    } else {
+      // Visual feedback for each tap
+      const logo = document.querySelector('.logo-wrapper');
+      if (logo) {
+        logo.classList.add('tap');
+        setTimeout(() => logo.classList.remove('tap'), 200);
+      }
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      if (tapTimeoutRef.current) window.clearTimeout(tapTimeoutRef.current);
+    };
+  }, []);
 
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
@@ -18,9 +72,26 @@ const Header = () => {
     <header className="fixed top-0 left-0 right-0 z-50 bg-transparent">
       <nav className="flex justify-between items-center p-6 md:p-8 mx-4 md:mx-8 relative z-10">
         {/* Logo */}
-        <div className="text-white">
+        <div className="text-white logo-wrapper" onClick={handleLogoTap} onTouchStart={handleLogoTap} role="button" aria-label="site logo">
           <h1 className="text-xl md:text-2xl font-bold tracking-widest">{navbarData.title}</h1>
           <p className="text-xs tracking-wider opacity-80">{navbarData.subtitle}</p>
+          <style jsx>{`
+            .logo-wrapper {
+              transition: transform 0.2s ease;
+            }
+            .logo-wrapper.tap {
+              transform: scale(0.95);
+            }
+            .logo-wrapper.shake {
+              animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+            }
+            @keyframes shake {
+              10%, 90% { transform: translate3d(-1px, 0, 0); }
+              20%, 80% { transform: translate3d(2px, 0, 0); }
+              30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+              40%, 60% { transform: translate3d(4px, 0, 0); }
+            }
+          `}</style>
         </div>
         
         {/* Hamburger Menu */}
