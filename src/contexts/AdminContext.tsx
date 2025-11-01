@@ -7,10 +7,12 @@ interface GalleryImage {
   category: string;
 }
 
-interface Video {
+interface MediaItem {
   id: number;
   src: string;
   alt: string;
+  type: 'image' | 'video';
+  thumbnail?: string; // Optional thumbnail for videos
 }
 
 interface NavbarData {
@@ -27,19 +29,32 @@ interface VideoSectionData {
   galleryDescription: string;
 }
 
+interface BackgroundSettings {
+  heroBackground: {
+    type: 'image' | 'video';
+    src: string;
+  };
+  videoSectionBackground: {
+    type: 'image' | 'video';
+    src: string;
+  };
+}
+
 interface AdminContextType {
   galleryImages: GalleryImage[];
-  videos: Video[];
+  videos: MediaItem[];
   navbarData: NavbarData;
   videoSectionData: VideoSectionData;
+  backgroundSettings: BackgroundSettings;
   addGalleryImage: (image: Omit<GalleryImage, 'id'>) => void;
   updateGalleryImage: (id: number, image: Partial<GalleryImage>) => void;
   deleteGalleryImage: (id: number) => void;
-  addVideo: (video: Omit<Video, 'id'>) => void;
-  updateVideo: (id: number, video: Partial<Video>) => void;
+  addVideo: (video: Omit<MediaItem, 'id'>) => void;
+  updateVideo: (id: number, video: Partial<MediaItem>) => void;
   deleteVideo: (id: number) => void;
   updateNavbar: (data: Partial<NavbarData>) => void;
   updateVideoSection: (data: Partial<VideoSectionData>) => void;
+  updateBackgroundSettings: (data: Partial<BackgroundSettings>) => void;
 }
 
 const AdminContext = createContext<AdminContextType | undefined>(undefined);
@@ -49,6 +64,7 @@ const STORAGE_KEYS = {
   VIDEOS: 'riina_videos',
   NAVBAR: 'riina_navbar_data',
   VIDEO_SECTION: 'riina_video_section_data',
+  BACKGROUND_SETTINGS: 'riina_background_settings',
 };
 
 export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -73,11 +89,11 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     return images;
   };
 
-  const getDefaultVideos = (): Video[] => [
-    { id: 1, src: `${base}video1.mp4`, alt: "Fashion Reel 1" },
-    { id: 2, src: `${base}video2.mp4`, alt: "Beauty Campaign" },
-    { id: 3, src: `${base}video3.mp4`, alt: "Lifestyle Content" },
-    { id: 4, src: `${base}video4.mp4`, alt: "Editorial Shoot" },
+  const getDefaultVideos = (): MediaItem[] => [
+    { id: 1, src: `${base}video1.mp4`, alt: "Fashion Reel 1", type: 'video' },
+    { id: 2, src: `${base}video2.mp4`, alt: "Beauty Campaign", type: 'video' },
+    { id: 3, src: `${base}video3.mp4`, alt: "Lifestyle Content", type: 'video' },
+    { id: 4, src: `${base}video4.mp4`, alt: "Editorial Shoot", type: 'video' },
   ];
 
   const getDefaultNavbar = (): NavbarData => ({
@@ -94,13 +110,24 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     galleryDescription: "Browse through my diverse portfolio of work. Click on any video to view it.",
   });
 
+    const getDefaultBackgroundSettings = (): BackgroundSettings => ({
+      heroBackground: {
+        type: 'video',
+        src: `${base}video1.mp4`,
+      },
+      videoSectionBackground: {
+        type: 'video',
+        src: `${base}video1.mp4`,
+      },
+    });
+
   // Load data from localStorage or use defaults
   const [galleryImages, setGalleryImages] = useState<GalleryImage[]>(() => {
     const stored = localStorage.getItem(STORAGE_KEYS.GALLERY);
     return stored ? JSON.parse(stored) : getDefaultGalleryImages();
   });
 
-  const [videos, setVideos] = useState<Video[]>(() => {
+  const [videos, setVideos] = useState<MediaItem[]>(() => {
     const stored = localStorage.getItem(STORAGE_KEYS.VIDEOS);
     return stored ? JSON.parse(stored) : getDefaultVideos();
   });
@@ -114,6 +141,11 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     const stored = localStorage.getItem(STORAGE_KEYS.VIDEO_SECTION);
     return stored ? JSON.parse(stored) : getDefaultVideoSection();
   });
+
+    const [backgroundSettings, setBackgroundSettings] = useState<BackgroundSettings>(() => {
+      const stored = localStorage.getItem(STORAGE_KEYS.BACKGROUND_SETTINGS);
+      return stored ? JSON.parse(stored) : getDefaultBackgroundSettings();
+    });
 
   // Save to localStorage whenever data changes
   useEffect(() => {
@@ -132,6 +164,10 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     localStorage.setItem(STORAGE_KEYS.VIDEO_SECTION, JSON.stringify(videoSectionData));
   }, [videoSectionData]);
 
+    useEffect(() => {
+      localStorage.setItem(STORAGE_KEYS.BACKGROUND_SETTINGS, JSON.stringify(backgroundSettings));
+    }, [backgroundSettings]);
+
   // Gallery operations
   const addGalleryImage = (image: Omit<GalleryImage, 'id'>) => {
     const newId = Math.max(0, ...galleryImages.map(img => img.id)) + 1;
@@ -148,13 +184,13 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     setGalleryImages(galleryImages.filter(img => img.id !== id));
   };
 
-  // Video operations
-  const addVideo = (video: Omit<Video, 'id'>) => {
+  // Media operations (videos/images)
+  const addVideo = (video: Omit<MediaItem, 'id'>) => {
     const newId = Math.max(0, ...videos.map(v => v.id)) + 1;
     setVideos([...videos, { ...video, id: newId }]);
   };
 
-  const updateVideo = (id: number, video: Partial<Video>) => {
+  const updateVideo = (id: number, video: Partial<MediaItem>) => {
     setVideos(videos.map(v => 
       v.id === id ? { ...v, ...video } : v
     ));
@@ -174,6 +210,11 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     setVideoSectionData({ ...videoSectionData, ...data });
   };
 
+    // Background settings operations
+    const updateBackgroundSettings = (data: Partial<BackgroundSettings>) => {
+      setBackgroundSettings({ ...backgroundSettings, ...data });
+    };
+
   return (
     <AdminContext.Provider
       value={{
@@ -181,6 +222,7 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         videos,
         navbarData,
         videoSectionData,
+          backgroundSettings,
         addGalleryImage,
         updateGalleryImage,
         deleteGalleryImage,
@@ -189,6 +231,7 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         deleteVideo,
         updateNavbar,
         updateVideoSection,
+          updateBackgroundSettings,
       }}
     >
       {children}

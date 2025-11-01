@@ -1,11 +1,11 @@
 import { useAdmin } from "../contexts/AdminContext";
 
 const Hero = () => {
-  const { videos, galleryImages } = useAdmin();
+  const { videos, galleryImages, backgroundSettings } = useAdmin();
   const base = import.meta.env.BASE_URL;
   
   // Get first video for continuous background playback
-  const backgroundVideo = videos.length > 0 ? videos[0].src : `${base}video1.mp4`;
+  const heroBackground = backgroundSettings.heroBackground;
   
   // Get first 4 gallery images for hero showcase
   const heroImages = galleryImages.slice(0, 4);
@@ -25,16 +25,24 @@ const Hero = () => {
     >
       {/* Continuous Background Video */}
       <div className="absolute inset-0 z-0 overflow-hidden">
-        <video 
-          className="absolute w-full h-full object-cover"
-          muted
-          loop
-          autoPlay
-          playsInline
-          preload="auto"
-        >
-          <source src={backgroundVideo} type="video/mp4" />
-        </video>
+          {heroBackground.type === 'video' ? (
+            <video 
+              className="absolute w-full h-full object-cover"
+              muted
+              loop
+              autoPlay
+              playsInline
+              preload="auto"
+            >
+              <source src={heroBackground.src} type="video/mp4" />
+            </video>
+          ) : (
+            <img 
+              src={heroBackground.src}
+              alt="Hero Background"
+              className="absolute w-full h-full object-cover"
+            />
+          )}
         
         {/* Professional overlay with gradient for depth */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/50"></div>
@@ -58,7 +66,6 @@ const Hero = () => {
               style={{
                 color: 'transparent',
                 WebkitTextStroke: '2px white',
-                textStroke: '2px white',
                 fontFamily: 'Playfair Display, serif',                                                                                  
                 fontWeight: 900,
                 animationDelay: '0.3s'                                                                                                                                                    

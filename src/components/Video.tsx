@@ -1,36 +1,42 @@
-import { Play, Pause, ChevronLeft, ChevronRight } from "lucide-react";
+import { Play, Pause, ChevronLeft, ChevronRight, Image as ImageIcon } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { useAdmin } from "../contexts/AdminContext";
 
 const Video = () => {
-  const { videoSectionData, videos: adminVideos } = useAdmin();
+  const { videoSectionData, videos: adminVideos, backgroundSettings } = useAdmin();
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
   const videoRef = useRef<HTMLVideoElement>(null);
   const backgroundVideoRef = useRef<HTMLVideoElement>(null);
   const base = import.meta.env.BASE_URL;
 
+  const videoSectionBg = backgroundSettings.videoSectionBackground;
+
   // Use videos from admin panel, with fallback to default videos
   const defaultVideos = [
     {
       id: "1",
       src: `${base}video1.mp4`,
-      alt: "Fashion Editorial - High Fashion Campaign"
+      alt: "Fashion Editorial - High Fashion Campaign",
+      type: 'video' as const
     },
     {
       id: "2",
       src: `${base}video2.mp4`,
-      alt: "Runway Collection - Fashion Week Highlights"
+      alt: "Runway Collection - Fashion Week Highlights",
+      type: 'video' as const
     },
     {
       id: "3",
       src: `${base}video3.mp4`,
-      alt: "Commercial Campaign - Brand Collaboration"
+      alt: "Commercial Campaign - Brand Collaboration",
+      type: 'video' as const
     },
     {
       id: "4",
       src: `${base}video4.mp4`,
-      alt: "Editorial Shoot - Magazine Feature"
+      alt: "Editorial Shoot - Magazine Feature",
+      type: 'video' as const
     }
   ];
 
@@ -84,17 +90,25 @@ const Video = () => {
     <section id="video" className="relative bg-black min-h-screen flex items-center justify-center overflow-hidden py-20">
       {/* Background Video */}
       <div className="absolute inset-0 z-0">
-        <video 
-          ref={backgroundVideoRef}
-          className="w-full h-full object-cover opacity-20"
-          muted
-          loop
-          autoPlay
-          playsInline
-          key={currentVideo.id}
-        >
-          <source src={currentVideo.src} type="video/mp4" />
-        </video>
+          {videoSectionBg.type === 'video' ? (
+            <video 
+              ref={backgroundVideoRef}
+              className="w-full h-full object-cover opacity-20"
+              muted
+              loop
+              autoPlay
+              playsInline
+              key={videoSectionBg.src}
+            >
+              <source src={videoSectionBg.src} type="video/mp4" />
+            </video>
+          ) : (
+            <img 
+              src={videoSectionBg.src}
+              alt="Section Background"
+              className="w-full h-full object-cover opacity-20"
+            />
+          )}
         <div className="absolute inset-0 bg-black bg-opacity-60"></div>
       </div>
 
@@ -129,20 +143,30 @@ const Video = () => {
                 <ChevronRight className="text-white w-6 h-6" />
               </button>
 
-              <video 
-                key={currentVideo.id}
-                ref={videoRef}
-                className="w-full object-cover rounded-xl" 
-                style={{ height: '550px' }}
-                controls 
-                preload="metadata"
-                onPlay={() => setIsPlaying(true)}
-                onPause={() => setIsPlaying(false)}
-                onEnded={() => setIsPlaying(false)}
-              >
-                <source src={currentVideo.src} type="video/mp4" />
-                Your browser does not support the video tag.
-              </video>
+              {currentVideo.type === 'video' || !currentVideo.type ? (
+                <video 
+                  key={currentVideo.id}
+                  ref={videoRef}
+                  className="w-full object-cover rounded-xl" 
+                  style={{ height: '550px' }}
+                  controls 
+                  preload="metadata"
+                  onPlay={() => setIsPlaying(true)}
+                  onPause={() => setIsPlaying(false)}
+                  onEnded={() => setIsPlaying(false)}
+                >
+                  <source src={currentVideo.src} type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
+              ) : (
+                <img 
+                  key={currentVideo.id}
+                  src={currentVideo.src}
+                  alt={currentVideo.alt}
+                  className="w-full object-cover rounded-xl" 
+                  style={{ height: '550px' }}
+                />
+              )}
               
               {/* Video Overlay Info */}
               <div className="absolute bottom-6 left-6 right-6 text-white z-10">
@@ -279,10 +303,10 @@ const Video = () => {
           </div>
         </div>
         
-        {/* Video Gallery */}
+        {/* Media Gallery */}
         <div className="mt-20">
           <div className="text-center mb-12">
-            <p className="text-pink-500 tracking-widest text-sm font-medium mb-2">VIDEO GALLERY</p>
+            <p className="text-pink-500 tracking-widest text-sm font-medium mb-2">MEDIA GALLERY</p>
             <h3 className="text-3xl lg:text-4xl font-playfair font-bold text-white">
               {videoSectionData.galleryTitle}
             </h3>
@@ -301,18 +325,33 @@ const Video = () => {
                 onClick={() => selectVideo(index)}
               >
                 <div className="relative overflow-hidden rounded-lg">
-                  <video 
-                    className="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-110"
-                    muted
-                    loop
-                    autoPlay
-                    playsInline
-                  >
-                    <source src={video.src} type="video/mp4" />
-                  </video>
-                  <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <Play className="text-white w-12 h-12" fill="white" />
-                  </div>
+                  {video.type === 'video' || !video.type ? (
+                    <>
+                      <video 
+                        className="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-110"
+                        muted
+                        loop
+                        autoPlay
+                        playsInline
+                      >
+                        <source src={video.src} type="video/mp4" />
+                      </video>
+                      <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <Play className="text-white w-12 h-12" fill="white" />
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <img 
+                        src={video.src}
+                        alt={video.alt}
+                        className="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-110"
+                      />
+                      <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <ImageIcon className="text-white w-12 h-12" />
+                      </div>
+                    </>
+                  )}
                   
                   {/* Video Number Indicator */}
                   <div className="absolute top-4 left-4">
@@ -334,7 +373,7 @@ const Video = () => {
                     <h4 className="font-semibold text-white text-sm mb-1 truncate">{video.alt}</h4>
                     <div className="flex justify-between items-center mt-2">
                       <span className="text-pink-400 text-xs bg-pink-500/20 px-2 py-1 rounded-full">
-                        Video {index + 1}
+                        {video.type === 'image' ? '🖼️ Image' : '🎥 Video'} {index + 1}
                       </span>
                     </div>
                   </div>

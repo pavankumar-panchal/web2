@@ -13,6 +13,7 @@ const AdminPanel = ({ isOpen, onClose }: AdminPanelProps) => {
     videos,
     navbarData,
     videoSectionData,
+    backgroundSettings,
     addGalleryImage,
     updateGalleryImage,
     deleteGalleryImage,
@@ -21,11 +22,29 @@ const AdminPanel = ({ isOpen, onClose }: AdminPanelProps) => {
     deleteVideo,
     updateNavbar,
     updateVideoSection,
+    updateBackgroundSettings,
   } = useAdmin();
 
-  const [activeTab, setActiveTab] = useState<'gallery' | 'videos' | 'navbar' | 'videoSection'>('gallery');
+  const [activeTab, setActiveTab] = useState<'gallery' | 'videos' | 'navbar' | 'videoSection' | 'background'>('gallery');
   const [editingId, setEditingId] = useState<number | null>(null);
-  const [formData, setFormData] = useState<any>({});
+  type MediaFormData = {
+    id?: number;
+    src?: string;
+    alt?: string;
+    category?: string;
+    type?: 'image' | 'video';
+    title?: string;
+    subtitle?: string;
+    // Video section fields
+    mainTitle?: string;
+    mainDescription?: string;
+    contentTitle?: string;
+    contentDescription?: string;
+    galleryTitle?: string;
+    galleryDescription?: string;
+  };
+
+  const [formData, setFormData] = useState<MediaFormData>({});
   const [imagePreview, setImagePreview] = useState<string>('');
   const [videoPreview, setVideoPreview] = useState<string>('');
   const [isUploading, setIsUploading] = useState<boolean>(false);
@@ -165,10 +184,18 @@ const AdminPanel = ({ isOpen, onClose }: AdminPanelProps) => {
       console.log('Submitting gallery image:', formData);
       
       if (editingId) {
-        updateGalleryImage(editingId, formData);
+        updateGalleryImage(editingId, {
+          src: formData.src!,
+          alt: formData.alt!,
+          category: formData.category!,
+        });
         alert('Image updated successfully!');
       } else {
-        addGalleryImage(formData);
+        addGalleryImage({
+          src: formData.src!,
+          alt: formData.alt!,
+          category: formData.category!,
+        });
         alert('Image added successfully!');
       }
       
@@ -187,37 +214,52 @@ const AdminPanel = ({ isOpen, onClose }: AdminPanelProps) => {
     e.stopPropagation();
     
     try {
-      // Validate that video source exists
+      // Validate that media source exists
       if (!formData.src || formData.src.trim() === '') {
-        alert('Please upload a video or select one from the library');
+        alert('Please upload a media file or select one from the library');
         return;
       }
       
       // Validate that description exists
       if (!formData.alt || formData.alt.trim() === '') {
-        alert('Please provide a video description');
+        alert('Please provide a description');
         return;
       }
       
-      console.log('Submitting video:', formData);
+      // Validate that type is selected
+      if (!formData.type) {
+        alert('Please select media type (Image or Video)');
+        return;
+      }
+      
+      console.log('Submitting media:', formData);
       
       if (editingId) {
-        updateVideo(editingId, formData);
-        alert('Video updated successfully!');
+        updateVideo(editingId, {
+          src: formData.src!,
+          alt: formData.alt!,
+          type: formData.type!,
+        });
+        alert(`${formData.type === 'video' ? 'Video' : 'Image'} updated successfully!`);
       } else {
-        addVideo(formData);
-        alert('Video added successfully!');
+        addVideo({
+          src: formData.src!,
+          alt: formData.alt!,
+          type: formData.type!,
+        });
+        alert(`${formData.type === 'video' ? 'Video' : 'Image'} added successfully!`);
       }
       
       // Clear form after successful submission
       setFormData({});
       setEditingId(null);
       setVideoPreview('');
+      setImagePreview('');
       setUploadProgress('');
       setIsUploading(false);
     } catch (error) {
-      console.error('Error submitting video:', error);
-      alert('Error adding video. Please try again.');
+      console.error('Error submitting media:', error);
+      alert('Error adding media. Please try again.');
     }
   };
 
@@ -285,13 +327,21 @@ const AdminPanel = ({ isOpen, onClose }: AdminPanelProps) => {
     }
   };
 
-  const handleEdit = (item: any, type: string) => {
+  const handleEdit = (item: MediaFormData, type: string) => {
     setEditingId(item.id);
     setFormData(item);
     if (type === 'gallery') {
       setImagePreview(item.src);
     } else if (type === 'video') {
-      setVideoPreview(item.src);
+      // Handle both video and image types
+      if (item.type === 'video') {
+        setVideoPreview(item.src);
+      } else if (item.type === 'image') {
+        setImagePreview(item.src);
+      } else {
+        // Fallback for legacy items without type
+        setVideoPreview(item.src);
+      }
     }
   };
 
@@ -364,10 +414,129 @@ const AdminPanel = ({ isOpen, onClose }: AdminPanelProps) => {
             <VideoIcon className="w-4 h-4 flex-shrink-0" />
             <span className="hidden xs:inline">Video Section</span>
           </button>
+          <button
+            onClick={() => setActiveTab('background')}
+            className={`flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 rounded-lg transition-all whitespace-nowrap text-sm sm:text-base ${
+              activeTab === 'background'
+                ? 'bg-pink-500 text-white'
+                : 'bg-secondary hover:bg-secondary/70'
+            }`}
+          >
+            <ImageIcon className="w-4 h-4 flex-shrink-0" />
+            <span className="hidden xs:inline">Backgrounds</span>
+          </button>
         </div>
 
         {/* Content */}
         <div className="flex-1 overflow-y-auto p-3 sm:p-6">
+          {/* Backgrounds Tab */}
+          {activeTab === 'background' && (
+            <div className="space-y-6">
+              {/* Hero Background */}
+              <div className="bg-secondary/30 p-6 rounded-lg">
+                <h3 className="text-xl font-bold mb-4">Hero Background</h3>
+                <div className="space-y-4">
+                  {/* Type Selector */}
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Type</label>
+                    <div className="flex gap-4">
+                      <label className="flex items-center gap-2 cursor-pointer">
+                        <input
+                          type="radio"
+                          name="heroBgType"
+                          value="video"
+                          checked={backgroundSettings.heroBackground.type === 'video'}
+                          onChange={() => updateBackgroundSettings({ heroBackground: { ...backgroundSettings.heroBackground, type: 'video' } })}
+                          className="w-4 h-4 text-pink-500"
+                        />
+                        <VideoIcon className="w-5 h-5" />
+                        <span>Video</span>
+                      </label>
+                      <label className="flex items-center gap-2 cursor-pointer">
+                        <input
+                          type="radio"
+                          name="heroBgType"
+                          value="image"
+                          checked={backgroundSettings.heroBackground.type === 'image'}
+                          onChange={() => updateBackgroundSettings({ heroBackground: { ...backgroundSettings.heroBackground, type: 'image' } })}
+                          className="w-4 h-4 text-pink-500"
+                        />
+                        <ImageIcon className="w-5 h-5" />
+                        <span>Image</span>
+                      </label>
+                    </div>
+                  </div>
+
+                  {/* Source Selector */}
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Source</label>
+                    <select
+                      value={backgroundSettings.heroBackground.src.replace(base, '')}
+                      onChange={(e) => updateBackgroundSettings({ heroBackground: { ...backgroundSettings.heroBackground, src: `${base}${e.target.value}` } })}
+                      className="w-full px-4 py-2 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500"
+                    >
+                      <option value="">Select file</option>
+                      {(backgroundSettings.heroBackground.type === 'video' ? ['video1.mp4','video2.mp4','video3.mp4','video4.mp4'] : ['model1.jpeg','model2.jpeg','model3.jpeg','model4.jpeg','model5.jpeg','model6.jpeg','model7.jpeg']).map((f) => (
+                        <option key={f} value={f}>{f}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              {/* Video Section Background */}
+              <div className="bg-secondary/30 p-6 rounded-lg">
+                <h3 className="text-xl font-bold mb-4">Video Section Background</h3>
+                <div className="space-y-4">
+                  {/* Type Selector */}
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Type</label>
+                    <div className="flex gap-4">
+                      <label className="flex items-center gap-2 cursor-pointer">
+                        <input
+                          type="radio"
+                          name="videoSectionBgType"
+                          value="video"
+                          checked={backgroundSettings.videoSectionBackground.type === 'video'}
+                          onChange={() => updateBackgroundSettings({ videoSectionBackground: { ...backgroundSettings.videoSectionBackground, type: 'video' } })}
+                          className="w-4 h-4 text-pink-500"
+                        />
+                        <VideoIcon className="w-5 h-5" />
+                        <span>Video</span>
+                      </label>
+                      <label className="flex items-center gap-2 cursor-pointer">
+                        <input
+                          type="radio"
+                          name="videoSectionBgType"
+                          value="image"
+                          checked={backgroundSettings.videoSectionBackground.type === 'image'}
+                          onChange={() => updateBackgroundSettings({ videoSectionBackground: { ...backgroundSettings.videoSectionBackground, type: 'image' } })}
+                          className="w-4 h-4 text-pink-500"
+                        />
+                        <ImageIcon className="w-5 h-5" />
+                        <span>Image</span>
+                      </label>
+                    </div>
+                  </div>
+
+                  {/* Source Selector */}
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Source</label>
+                    <select
+                      value={backgroundSettings.videoSectionBackground.src.replace(base, '')}
+                      onChange={(e) => updateBackgroundSettings({ videoSectionBackground: { ...backgroundSettings.videoSectionBackground, src: `${base}${e.target.value}` } })}
+                      className="w-full px-4 py-2 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500"
+                    >
+                      <option value="">Select file</option>
+                      {(backgroundSettings.videoSectionBackground.type === 'video' ? ['video1.mp4','video2.mp4','video3.mp4','video4.mp4'] : ['model1.jpeg','model2.jpeg','model3.jpeg','model4.jpeg','model5.jpeg','model6.jpeg','model7.jpeg']).map((f) => (
+                        <option key={f} value={f}>{f}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
           {/* Gallery Tab */}
           {activeTab === 'gallery' && (
             <div className="space-y-6">
@@ -531,37 +700,96 @@ const AdminPanel = ({ isOpen, onClose }: AdminPanelProps) => {
             <div className="space-y-6">
               <div className="bg-secondary/30 p-6 rounded-lg">
                 <h3 className="text-xl font-bold mb-4">
-                  {editingId ? 'Edit Video' : 'Add New Video'}
+                  {editingId ? 'Edit Media' : 'Add New Media'}
                 </h3>
                 <form onSubmit={handleSubmitVideo} className="space-y-4">
+                  {/* Media Type Selector */}
                   <div>
-                    <label className="block text-sm font-medium mb-2">Upload Video</label>
+                    <label className="block text-sm font-medium mb-2">Media Type</label>
+                    <div className="flex gap-4">
+                      <label className="flex items-center gap-2 cursor-pointer">
+                        <input
+                          type="radio"
+                          name="mediaType"
+                          value="video"
+                          checked={formData.type === 'video'}
+                          onChange={(e) => {
+                            setFormData({ ...formData, type: e.target.value as 'video' | 'image' });
+                            setVideoPreview('');
+                            setImagePreview('');
+                          }}
+                          className="w-4 h-4 text-pink-500"
+                        />
+                        <VideoIcon className="w-5 h-5" />
+                        <span>Video</span>
+                      </label>
+                      <label className="flex items-center gap-2 cursor-pointer">
+                        <input
+                          type="radio"
+                          name="mediaType"
+                          value="image"
+                          checked={formData.type === 'image'}
+                          onChange={(e) => {
+                            setFormData({ ...formData, type: e.target.value as 'video' | 'image' });
+                            setVideoPreview('');
+                            setImagePreview('');
+                          }}
+                          className="w-4 h-4 text-pink-500"
+                        />
+                        <ImageIcon className="w-5 h-5" />
+                        <span>Image</span>
+                      </label>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium mb-2">
+                      Upload {formData.type === 'image' ? 'Image' : 'Video'}
+                    </label>
                     <div className="space-y-3">
                       {/* File Upload */}
-                      <div className="flex items-center gap-3">
-                        <label className="flex-1 cursor-pointer">
-                          <div className="flex items-center justify-center w-full px-4 py-3 border-2 border-dashed border-border rounded-lg hover:border-pink-500 transition-colors bg-secondary/30">
-                            <div className="text-center">
-                              <VideoIcon className="w-8 h-8 mx-auto mb-2 text-muted-foreground" />
-                              <p className="text-sm text-muted-foreground">
-                                Click to upload video
-                              </p>
-                              <p className="text-xs text-muted-foreground mt-1">
-                                MP4, WebM, MOV, OGG up to 100MB
-                              </p>
-                              <p className="text-xs text-pink-500 mt-1">
-                                ⚠ Large files may take time to upload
-                              </p>
+                      {formData.type && (
+                        <div className="flex items-center gap-3">
+                          <label className="flex-1 cursor-pointer">
+                            <div className="flex items-center justify-center w-full px-4 py-3 border-2 border-dashed border-border rounded-lg hover:border-pink-500 transition-colors bg-secondary/30">
+                              <div className="text-center">
+                                {formData.type === 'video' ? (
+                                  <>
+                                    <VideoIcon className="w-8 h-8 mx-auto mb-2 text-muted-foreground" />
+                                    <p className="text-sm text-muted-foreground">
+                                      Click to upload video
+                                    </p>
+                                    <p className="text-xs text-muted-foreground mt-1">
+                                      MP4, WebM, MOV, OGG up to 100MB
+                                    </p>
+                                    <p className="text-xs text-pink-500 mt-1">
+                                      ⚠ Large files may take time to upload
+                                    </p>
+                                  </>
+                                ) : (
+                                  <>
+                                    <ImageIcon className="w-8 h-8 mx-auto mb-2 text-muted-foreground" />
+                                    <p className="text-sm text-muted-foreground">
+                                      Click to upload image
+                                    </p>
+                                    <p className="text-xs text-muted-foreground mt-1">
+                                      JPEG, PNG, GIF, WebP up to 10MB
+                                    </p>
+                                  </>
+                                )}
+                              </div>
                             </div>
-                          </div>
-                          <input
-                            type="file"
-                            accept="video/mp4,video/webm,video/ogg,video/quicktime"
-                            onChange={handleVideoFileChange}
-                            className="hidden"
-                          />
-                        </label>
-                      </div>
+                            <input
+                              type="file"
+                              accept={formData.type === 'video' 
+                                ? "video/mp4,video/webm,video/ogg,video/quicktime" 
+                                : "image/jpeg,image/jpg,image/png,image/gif,image/webp"}
+                              onChange={formData.type === 'video' ? handleVideoFileChange : handleImageFileChange}
+                              className="hidden"
+                            />
+                          </label>
+                        </div>
+                      )}
 
                       {/* Or Select from Library */}
                       <div className="relative">
@@ -573,22 +801,35 @@ const AdminPanel = ({ isOpen, onClose }: AdminPanelProps) => {
                         </div>
                       </div>
 
-                      <select
-                        value={formData.src?.replace(base, '') || ''}
-                        onChange={(e) => {
-                          const src = e.target.value ? `${base}${e.target.value}` : '';
-                          setFormData({ ...formData, src });
-                          setVideoPreview(src);
-                        }}
-                        className="w-full px-4 py-2 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500"
-                      >
-                        <option value="">Select from existing videos</option>
-                        {availableVideos.map((vid) => (
-                          <option key={vid} value={vid}>
-                            {vid}
-                          </option>
-                        ))}
-                      </select>
+                      {formData.type && (
+                        <select
+                          value={formData.src?.replace(base, '') || ''}
+                          onChange={(e) => {
+                            const src = e.target.value ? `${base}${e.target.value}` : '';
+                            setFormData({ ...formData, src });
+                            if (formData.type === 'video') {
+                              setVideoPreview(src);
+                            } else {
+                              setImagePreview(src);
+                            }
+                          }}
+                          className="w-full px-4 py-2 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500"
+                        >
+                          <option value="">Select from existing {formData.type === 'video' ? 'videos' : 'images'}</option>
+                          {formData.type === 'video' 
+                            ? availableVideos.map((vid) => (
+                                <option key={vid} value={vid}>
+                                  {vid}
+                                </option>
+                              ))
+                            : availableImages.map((img) => (
+                                <option key={img} value={img}>
+                                  {img}
+                                </option>
+                              ))
+                          }
+                        </select>
+                      )}
 
                       {/* Upload Progress */}
                       {uploadProgress && (
@@ -609,20 +850,28 @@ const AdminPanel = ({ isOpen, onClose }: AdminPanelProps) => {
                       )}
 
                       {/* Preview */}
-                      {(videoPreview || formData.src) && (
+                      {((videoPreview && formData.type === 'video') || (imagePreview && formData.type === 'image') || formData.src) && (
                         <div className="mt-2 p-3 bg-secondary/50 rounded-lg border border-border">
                           <p className="text-xs text-muted-foreground mb-2">Preview:</p>
-                          <video 
-                            src={videoPreview || formData.src} 
-                            className="w-full h-48 object-cover rounded"
-                            controls
-                          />
+                          {formData.type === 'video' ? (
+                            <video 
+                              src={videoPreview || formData.src} 
+                              className="w-full h-48 object-cover rounded"
+                              controls
+                            />
+                          ) : (
+                            <img 
+                              src={imagePreview || formData.src} 
+                              alt="Preview"
+                              className="w-full h-48 object-cover rounded"
+                            />
+                          )}
                         </div>
                       )}
                     </div>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium mb-2">Video Description</label>
+                    <label className="block text-sm font-medium mb-2">Description</label>
                     <input
                       type="text"
                       value={formData.alt || ''}
@@ -636,9 +885,10 @@ const AdminPanel = ({ isOpen, onClose }: AdminPanelProps) => {
                     <button
                       type="submit"
                       className="flex items-center gap-2 px-6 py-2 bg-pink-500 hover:bg-pink-600 text-white rounded-lg transition-colors"
+                      disabled={!formData.type}
                     >
                       {editingId ? <Save className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
-                      {editingId ? 'Update' : 'Add'} Video
+                      {editingId ? 'Update' : 'Add'} {formData.type === 'video' ? 'Video' : formData.type === 'image' ? 'Image' : 'Media'}
                     </button>
                     {editingId && (
                       <button
@@ -654,26 +904,43 @@ const AdminPanel = ({ isOpen, onClose }: AdminPanelProps) => {
               </div>
 
               <div className="bg-secondary/30 p-3 sm:p-6 rounded-lg">
-                <h3 className="text-lg sm:text-xl font-bold mb-4">Videos ({videos.length})</h3>
+                <h3 className="text-lg sm:text-xl font-bold mb-4">Media Library ({videos.length})</h3>
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 max-h-[400px] overflow-y-auto">
-                  {videos.map((video) => (
-                    <div key={video.id} className="bg-background p-3 sm:p-4 rounded-lg border border-border">
-                      <video
-                        src={video.src}
-                        className="w-full h-32 sm:h-40 object-cover rounded-lg mb-2"
-                        controls
-                      />
-                      <p className="text-sm font-medium truncate">{video.alt}</p>
+                  {videos.map((media) => (
+                    <div key={media.id} className="bg-background p-3 sm:p-4 rounded-lg border border-border">
+                      <div className="relative">
+                        {media.type === 'video' ? (
+                          <video
+                            src={media.src}
+                            className="w-full h-32 sm:h-40 object-cover rounded-lg mb-2"
+                            controls
+                          />
+                        ) : (
+                          <img
+                            src={media.src}
+                            alt={media.alt}
+                            className="w-full h-32 sm:h-40 object-cover rounded-lg mb-2"
+                          />
+                        )}
+                        <span className={`absolute top-2 right-2 px-2 py-1 text-xs font-semibold rounded ${
+                          media.type === 'video' 
+                            ? 'bg-blue-500 text-white' 
+                            : 'bg-green-500 text-white'
+                        }`}>
+                          {media.type === 'video' ? '🎥 Video' : '🖼️ Image'}
+                        </span>
+                      </div>
+                      <p className="text-sm font-medium truncate">{media.alt}</p>
                       <div className="flex flex-col xs:flex-row gap-2 mt-3">
                         <button
-                          onClick={() => handleEdit(video, 'video')}
+                          onClick={() => handleEdit(media, 'video')}
                           className="flex-1 flex items-center justify-center gap-1 px-2 sm:px-3 py-1.5 sm:py-1 bg-blue-500 hover:bg-blue-600 text-white text-xs sm:text-sm rounded transition-colors"
                         >
                           <Edit2 className="w-3 h-3" />
                           Edit
                         </button>
                         <button
-                          onClick={() => deleteVideo(video.id)}
+                          onClick={() => deleteVideo(media.id)}
                           className="flex-1 flex items-center justify-center gap-1 px-2 sm:px-3 py-1.5 sm:py-1 bg-red-500 hover:bg-red-600 text-white text-xs sm:text-sm rounded transition-colors"
                         >
                           <Trash2 className="w-3 h-3" />
